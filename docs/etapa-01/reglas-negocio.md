@@ -1,77 +1,132 @@
 # **Reglas de Negocio**
 
 
-
-**RN.01** Todo cliente que realice un pedido debe estar registrado con sus datos personales y de contacto.
-
-
-
-**RN.02** Cada pedido debe tener un código, fecha, fecha estimada de entrega, estado e importe total.
+**RN.01** Todo cliente debe estar registrado con sus datos personales y de contacto.
 
 
 
-**RN.03** Un cliente puede realizar uno o varios pedidos, pero cada pedido pertenece a un solo cliente.
+**RN.02** Un cliente puede tener una o varias facturas, pero cada factura pertenece a un solo cliente.
 
 
 
-**RN.04** Cada prenda debe tener un código, descripción, talle, color y precio.
+**RN.03** Cada factura debe registrar un código, fecha, descripción, método de pago e importe total.
 
 
 
-**RN.05** Cada pedido debe incluir una o varias prendas, indicando cantidad y precio unitario.
+**RN.04** Cada factura debe contener uno o varios detalles de factura.
 
 
 
-**RN.06** El precio registrado en un pedido debe mantenerse aunque cambie posteriormente.
+**RN.05** Cada detalle de factura debe registrar el producto, cantidad y precio unitario.
 
 
 
-**RN.07** Cada diseño debe tener código, nombre, descripción y tipo de estampado.RN.08 Al utilizar materiales en un trabajo, la cantidad disponible debe disminuir.
+**RN.06** El precio parcial de un detalle de factura se obtiene multiplicando la cantidad por el precio unitario.
 
 
 
-**RN.09** Cada proveedor debe registrarse con código, razón social, CUIT, dirección y teléfono.
+**RN.07** El total de la factura corresponde a la suma de los precios parciales de sus detalles.
 
 
 
-**RN.10** Un proveedor puede suministrar varios materiales y un material puede tener varios proveedores.
+**RN.08** Cada producto debe identificarse con un código, nombre, precio y stock disponible.
 
 
 
-**RN.11** Cada pedido debe registrar el método de pago utilizado.
+**RN.09** Un producto puede corresponder a una prenda o a una estampa, o ambas según su tipo.
 
 
 
-**RN.12** Cada producto debe registrarse con un código  identificador, precio y stock disponible.
+**RN.10** Cada prenda debe registrar código, tipo de tela, talle y color.
 
 
 
-**RN.13** Un producto puede estar asociado a un diseño o a una prenda, según el tipo de producto. 
+**RN.11** Cada estampa debe identificarse mediante un código.
 
 
 
-**RN.14** Cada diseño debe registrar sus medidas de ancho y alto cuando corresponda.
+**RN.12** Cada diseño debe identificarse mediante un código y registrar color, logotipo, tarifa base y medidas cuando corresponda.
 
 
 
-**RN.15** Una prenda debe registrar su talle, color, tipo de tela y precio.
+**RN.13** Un diseño puede estar asociado a una o varias prendas y estampas, según corresponda.
 
 
 
-**RN.16** Un diseño puede utilizarse en uno o varios productos, y un producto puede utilizar uno o varios diseños, según corresponda.
+**RN.14** Las medidas de un diseño deben registrar ancho y alto cuando sean necesarias.
 
 
 
-**RN.17** Un producto puede requerir uno o varios insumos para su elaboración, y un insumo puede utilizarse en distintos productos.
+**RN.15** Cada insumo debe identificarse mediante un código, tipo y cantidad disponible en stock.
 
 
 
-**RN.18** Cada insumo debe identificarse mediante un código y registrar la cantidad disponible en stock.
+**RN.16** Un producto puede requerir uno o varios insumos para su elaboración.
 
 
 
-**RN.19** Cada pedido debe tener un estado: pendiente, en proceso, terminado o entregado.
+**RN.17** Un insumo puede utilizarse en uno o varios productos.
 
 
 
-**RN.20** Un pedido terminado puede ser entregado al cliente y debe registrarse como entregado
+**RN.18** Al registrar el consumo de un insumo, su cantidad disponible debe disminuir según la cantidad utilizada.
+
+
+
+**RN.19** Cada proveedor debe registrarse con código, nombre, correo electrónico y teléfono.
+
+
+
+ **RN.20** Un proveedor puede suministrar uno o varios insumos, y un insumo puede ser suministrado por uno o varios proveedores.
+
+
+ 
+**RN.21** Cada compra debe registrarse con un código identificador y una fecha.
+
+
+
+**RN.22** Cada compra corresponde a un único proveedor, mientras que un proveedor puede realizar una o varias compras.
+
+
+
+**RN.23** Cada compra debe contener uno o varios detalles de compra.
+
+
+
+**RN.24** Cada detalle de compra debe registrar el insumo adquirido, la cantidad y el precio unitario de compra.
+
+
+
+**RN.25** Un insumo puede aparecer en uno o varios detalles de compra.
+
+
+
+**RN.26** Al registrar una compra de insumos, el stock disponible debe aumentar según la cantidad adquirida.
+
+
+
+**RN.27** Cada cliente debe estar asociado a una ciudad.
+
+
+
+**RN.28** Cada ciudad debe pertenecer a una única provincia.
+
+
+
+**RN.29** Una provincia puede contener una o varias ciudades.
+
+
+
+**RN.30** Cada ciudad debe identificarse mediante un código y registrar su nombre.
+
+
+
+**RN.31** Cada provincia debe identificarse mediante un código y registrar su nombre.
+
+
+
+
+
+
+
+
