@@ -1,0 +1,335 @@
+USE NegocioIndumentariaDtf;
+GO
+
+ /* UBICACION - CLIENTES - METODOS DE PAGO */
+ 
+
+/* TABLA PROVINCIA */
+
+CREATE TABLE PROVINCIA (
+    id_provincia INT NOT NULL,
+    nombre_provincia VARCHAR(50) NOT NULL,
+
+    CONSTRAINT PK_PROVINCIA PRIMARY KEY (id_provincia),
+    CONSTRAINT UQ_PROVINCIA_NOMBRE UNIQUE (nombre_provincia)
+);
+
+GO
+
+
+/* TABLA CIUDAD: PROVINCIA 1:N CIUDAD */
+
+CREATE TABLE CIUDAD (
+    id_ciudad INT NOT NULL,
+    nombre_ciudad VARCHAR(50) NOT NULL,
+    id_provincia INT NOT NULL,
+
+    CONSTRAINT PK_CIUDAD PRIMARY KEY (id_ciudad),
+    CONSTRAINT FK_CIUDAD_PROVINCIA FOREIGN KEY (id_provincia) REFERENCES PROVINCIA(id_provincia)
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION,
+
+    CONSTRAINT UQ_CIUDAD_PROVINCIA UNIQUE (nombre_ciudad, id_provincia)
+);
+
+GO
+
+
+/* TABLA CLIENTE: CIUDAD 1:N CLIENTE */
+
+CREATE TABLE CLIENTE (
+    id_cliente INT NOT NULL,
+    nombre_cliente VARCHAR(50) NOT NULL,
+    apellido_cliente VARCHAR(50) NOT NULL,
+    dni_cliente VARCHAR(20) NOT NULL,
+    telefono_cliente VARCHAR(25) NOT NULL,
+    correo_cliente VARCHAR(100) NOT NULL,
+    codigo_postal VARCHAR(10),
+    direccion VARCHAR(100) NOT NULL,
+    id_ciudad INT NOT NULL,
+
+    CONSTRAINT PK_CLIENTE PRIMARY KEY (id_cliente),
+    CONSTRAINT UQ_CLIENTE_DNI UNIQUE (dni_cliente),
+    CONSTRAINT UQ_CLIENTE_CORREO UNIQUE (correo_cliente),
+    CONSTRAINT FK_CLIENTE_CIUDAD FOREIGN KEY (id_ciudad) REFERENCES CIUDAD(id_ciudad)
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION
+);
+
+GO
+
+
+/* TABLA METODO_PAGO */
+
+CREATE TABLE METODO_PAGO (
+    id_metodopago INT NOT NULL,
+    descripcion VARCHAR(50) NOT NULL,
+    CONSTRAINT PK_METODO_PAGO
+        PRIMARY KEY (id_metodopago),
+
+    CONSTRAINT UQ_METODO_PAGO_DESCRIPCION UNIQUE (descripcion)
+);
+
+GO
+
+/* PRODUCTOS - DISEÑOS - PRENDAS - ESTAMPAS */
+
+
+/* PRODUCTO */
+
+CREATE TABLE PRODUCTO (
+    id_producto INT NOT NULL,
+    nombre_producto VARCHAR(60) NOT NULL,
+    precio_producto DECIMAL(10,2) NOT NULL,
+    stock_producto INT NOT NULL
+
+    CONSTRAINT DF_PRODUCTO_STOCK DEFAULT 0,
+
+    CONSTRAINT PK_PRODUCTO PRIMARY KEY (id_producto),
+
+    CONSTRAINT CK_PRODUCTO_PRECIO CHECK (precio_producto >= 0),
+
+    CONSTRAINT CK_PRODUCTO_STOCK CHECK (stock_producto >= 0)
+);
+
+GO
+
+
+/* DISENO */
+
+CREATE TABLE DISENO (
+    id_diseno INT NOT NULL,
+    color VARCHAR(30),
+    logotipo VARCHAR(100),
+    tarifa_base DECIMAL(10,2) NOT NULL,
+    ancho DECIMAL(6,2),
+    alto DECIMAL(6,2),
+
+    CONSTRAINT PK_DISENO
+        PRIMARY KEY (id_diseno),
+
+    CONSTRAINT CK_DISENO_TARIFA
+        CHECK (tarifa_base >= 0),
+
+    CONSTRAINT CK_DISENO_ANCHO
+        CHECK (ancho IS NULL OR ancho > 0),
+
+    CONSTRAINT CK_DISENO_ALTO
+        CHECK (alto IS NULL OR alto > 0),
+
+    CONSTRAINT CK_DISENO_MEDIDAS
+        CHECK (
+            (ancho IS NULL AND alto IS NULL)
+            OR
+            (ancho IS NOT NULL AND alto IS NOT NULL)
+        )
+);
+GO
+
+
+/* PRENDA */
+
+CREATE TABLE PRENDA (
+    id_prenda INT NOT NULL,
+    id_producto INT NOT NULL,
+    id_diseno INT NULL,
+    tipo_de_tela VARCHAR(40) NOT NULL,
+    talle VARCHAR(10) NOT NULL,
+    color VARCHAR(30) NOT NULL,
+
+    CONSTRAINT PK_PRENDA PRIMARY KEY (id_prenda),
+
+    CONSTRAINT UQ_PRENDA_PRODUCTO UNIQUE (id_producto),
+
+    CONSTRAINT FK_PRENDA_PRODUCTO FOREIGN KEY (id_producto) REFERENCES PRODUCTO(id_producto)
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION,
+
+    CONSTRAINT FK_PRENDA_DISENO FOREIGN KEY (id_diseno) REFERENCES DISENO(id_diseno)
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION
+);
+
+GO
+
+
+/* ESTAMPA */
+
+CREATE TABLE ESTAMPA (
+    id_estampa INT NOT NULL,
+    id_producto INT NOT NULL,
+    id_diseno INT NOT NULL,
+
+    CONSTRAINT PK_ESTAMPA PRIMARY KEY (id_estampa),
+    CONSTRAINT UQ_ESTAMPA_PRODUCTO UNIQUE (id_producto),
+    CONSTRAINT FK_ESTAMPA_PRODUCTO FOREIGN KEY (id_producto) REFERENCES PRODUCTO(id_producto)
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION,
+
+    CONSTRAINT FK_ESTAMPA_DISENO FOREIGN KEY (id_diseno) REFERENCES DISENO(id_diseno)
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION
+);
+
+GO
+
+
+/* PROVEEDORES - INSUMOS - COMPRAS */
+
+
+/* PROVEEDOR */
+
+CREATE TABLE PROVEEDOR (
+    id_proveedor INT NOT NULL,
+    nombre_proveedor VARCHAR(60) NOT NULL,
+    correo_proveedor VARCHAR(100) NOT NULL,
+    telefono_proveedor VARCHAR(25) NOT NULL,
+
+    CONSTRAINT PK_PROVEEDOR PRIMARY KEY (id_proveedor),
+    CONSTRAINT UQ_PROVEEDOR_CORREO UNIQUE (correo_proveedor)
+);
+
+GO
+
+
+/* INSUMO */
+
+CREATE TABLE INSUMO (
+    id_insumo INT NOT NULL,
+    tipo_insumo VARCHAR(60) NOT NULL,
+    stock_insumo INT NOT NULL
+
+    CONSTRAINT DF_INSUMO_STOCK DEFAULT 0,
+    CONSTRAINT PK_INSUMO PRIMARY KEY (id_insumo),
+    CONSTRAINT CK_INSUMO_STOCK CHECK (stock_insumo >= 0)
+);
+
+GO
+
+
+/* COMPRA: PROVEEDOR 1:N COMPRA */
+
+CREATE TABLE COMPRA (
+    id_compra INT NOT NULL,
+    fecha_compra DATE NOT NULL,
+    id_proveedor INT NOT NULL,
+
+    CONSTRAINT PK_COMPRA PRIMARY KEY (id_compra),
+    CONSTRAINT FK_COMPRA_PROVEEDOR FOREIGN KEY (id_proveedor) REFERENCES PROVEEDOR(id_proveedor)
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION
+);
+
+GO
+
+
+/* DETALLE_COMPRA */
+
+CREATE TABLE DETALLE_COMPRA (
+    id_detalle_compra INT NOT NULL,
+    id_compra INT NOT NULL,
+    id_insumo INT NOT NULL,
+    cantidad INT NOT NULL,
+    precio_unitario_compra DECIMAL(10,2) NOT NULL,
+
+    CONSTRAINT PK_DETALLE_COMPRA PRIMARY KEY (id_detalle_compra, id_compra),
+    CONSTRAINT FK_DETALLE_COMPRA_COMPRA FOREIGN KEY (id_compra) REFERENCES COMPRA(id_compra)
+        ON DELETE CASCADE
+        ON UPDATE NO ACTION,
+
+    CONSTRAINT FK_DETALLE_COMPRA_INSUMO FOREIGN KEY (id_insumo) REFERENCES INSUMO(id_insumo)
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION,
+
+    CONSTRAINT CK_DETALLE_COMPRA_CANTIDAD CHECK (cantidad > 0),
+    CONSTRAINT CK_DETALLE_COMPRA_PRECIO CHECK (precio_unitario_compra >= 0),
+    CONSTRAINT UQ_DETALLE_COMPRA_INSUMO UNIQUE (id_compra, id_insumo)
+);
+
+GO
+
+/* ELABORACION - FACTURACION */
+
+
+/* PRODUCTO_INSUMO: PRODUCTO N:M INSUMO */
+
+CREATE TABLE PRODUCTO_INSUMO (
+    id_producto INT NOT NULL,
+    id_insumo INT NOT NULL,
+    cantidad_requerida INT NOT NULL,
+
+    CONSTRAINT PK_PRODUCTO_INSUMO PRIMARY KEY (id_producto, id_insumo),
+
+    CONSTRAINT FK_PRODUCTO_INSUMO_PRODUCTO FOREIGN KEY (id_producto) REFERENCES PRODUCTO(id_producto)
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION,
+
+    CONSTRAINT FK_PRODUCTO_INSUMO_INSUMO FOREIGN KEY (id_insumo) REFERENCES INSUMO(id_insumo)
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION,
+
+    CONSTRAINT CK_PRODUCTO_INSUMO_CANTIDAD CHECK (cantidad_requerida > 0)
+);
+
+GO
+
+
+/* FACTURA */
+
+CREATE TABLE FACTURA (
+    id_factura INT NOT NULL,
+    fecha_factura DATE NOT NULL,
+    descripcion VARCHAR(150) NOT NULL,
+    id_cliente INT NOT NULL,
+    id_metodopago INT NOT NULL,
+
+    importe_total DECIMAL(12,2) NOT NULL
+        CONSTRAINT DF_FACTURA_TOTAL DEFAULT 0,
+
+    CONSTRAINT PK_FACTURA PRIMARY KEY (id_factura),
+    CONSTRAINT FK_FACTURA_CLIENTE FOREIGN KEY (id_cliente) REFERENCES CLIENTE(id_cliente)
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION,
+
+    CONSTRAINT FK_FACTURA_METODO_PAGO FOREIGN KEY (id_metodopago) REFERENCES METODO_PAGO(id_metodopago)
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION,
+
+    CONSTRAINT CK_FACTURA_TOTAL CHECK (importe_total >= 0)
+);
+
+GO
+
+
+/* DETALLE_FACTURA */
+
+CREATE TABLE DETALLE_FACTURA (
+    id_detalle_factura INT NOT NULL,
+    id_factura INT NOT NULL,
+    id_producto INT NOT NULL,
+    cantidad INT NOT NULL,
+    precio_unitario DECIMAL(10,2) NOT NULL,
+
+    precio_parcial AS (
+        CONVERT(
+            DECIMAL(12,2),
+            cantidad * precio_unitario
+        )
+    ) PERSISTED,
+
+    CONSTRAINT PK_DETALLE_FACTURA PRIMARY KEY (id_detalle_factura, id_factura),
+
+    CONSTRAINT FK_DETALLE_FACTURA_FACTURA FOREIGN KEY (id_factura) REFERENCES FACTURA(id_factura)
+        ON DELETE CASCADE
+        ON UPDATE NO ACTION,
+
+    CONSTRAINT FK_DETALLE_FACTURA_PRODUCTO FOREIGN KEY (id_producto) REFERENCES PRODUCTO(id_producto)
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION, 
+
+    CONSTRAINT CK_DETALLE_FACTURA_CANTIDAD CHECK (cantidad > 0),
+    CONSTRAINT CK_DETALLE_FACTURA_PRECIO CHECK (precio_unitario >= 0),
+    CONSTRAINT UQ_DETALLE_FACTURA_PRODUCTO UNIQUE (id_factura, id_producto)
+);
+GO
+
