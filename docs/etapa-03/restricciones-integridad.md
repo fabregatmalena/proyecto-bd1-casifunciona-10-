@@ -3,32 +3,24 @@ Base de Datos: NegocioIndumentariaDtf
 Motor: Microsoft SQL Server
 Lenguaje: T-SQL
 
-Introduccion
+1. Introduccion
 Durante la implementacion fisica de la base de datos NegocioIndumentariaDtf se definieron distintas restricciones con el objetivo de mantener la consistencia y validez de los datos almacenados.
 Las restricciones implementadas permiten controlar principalmente la integridad de entidad, la integridad referencial, la integridad de dominio y determinadas reglas de negocio.
 Para ello se utilizaron claves primarias (PRIMARY KEY), claves foraneas (FOREIGN KEY), restricciones UNIQUE, NOT NULL, CHECK, valores DEFAULT y una columna calculada en DETALLE_FACTURA.
 
-Integridad de Entidad
+2. Integridad de Entidad
 La integridad de entidad permite identificar de manera unica cada registro almacenado en las tablas.
 Para implementarla se utilizaron claves primarias.
 Las tablas PROVINCIA, CIUDAD, CLIENTE, METODO_PAGO, PRODUCTO, DISENO, PRENDA, ESTAMPA, PROVEEDOR, INSUMO, COMPRA y FACTURA poseen claves primarias simples.
 Por ejemplo:
-
-PROVINCIA: id_provincia
-
-CLIENTE: id_cliente
-
-PRODUCTO: id_producto
-
-PRENDA: id_prenda
-
-ESTAMPA: id_estampa
-
-PROVEEDOR: id_proveedor
-
-INSUMO: id_insumo
-
-FACTURA: id_factura
+- PROVINCIA: id_provincia
+- CLIENTE: id_cliente
+- PRODUCTO: id_producto
+- PRENDA: id_prenda
+- ESTAMPA: id_estampa
+- PROVEEDOR: id_proveedor
+- INSUMO: id_insumo
+- FACTURA: id_factura
 Estas claves se definieron como INT NOT NULL y PRIMARY KEY, evitando identificadores duplicados o nulos.
 Tambien existen claves primarias compuestas.
 En DETALLE_COMPRA, la clave primaria esta formada por:
@@ -39,7 +31,7 @@ Por su parte, PRODUCTO_INSUMO utiliza:
 (id_producto, id_insumo)
 Esta ultima clave compuesta permite implementar la relacion muchos a muchos entre productos e insumos e impide repetir exactamente la misma combinacion de producto e insumo.
 
-Restricciones de Unicidad
+3. Restricciones de Unicidad
 Ademas de las claves primarias, se utilizaron restricciones UNIQUE para atributos o combinaciones de atributos que no deben repetirse.
 En PROVINCIA, nombre_provincia es unico, evitando registrar dos veces la misma provincia.
 En CIUDAD, la combinacion:
@@ -58,7 +50,7 @@ En PRENDA se definio id_producto como unico. Por lo tanto, un producto determina
 En ESTAMPA tambien se definio id_producto como unico, por lo que un producto puede aparecer como maximo una vez dentro de ESTAMPA.
 Estas dos ultimas restricciones no impiden que un mismo producto aparezca una vez en PRENDA y tambien una vez en ESTAMPA. Esto es coherente con la RN.09, que establece que un producto puede corresponder a una prenda, a una estampa o a ambas.
 
-Integridad Referencial
+4. Integridad Referencial
 La integridad referencial se implemento mediante claves foraneas (FOREIGN KEY).
 Su finalidad es evitar referencias hacia registros que no existen.
 Por ejemplo, cada ciudad debe pertenecer a una provincia existente. Para ello, CIUDAD.id_provincia referencia a PROVINCIA.id_provincia.
@@ -70,7 +62,7 @@ Los detalles de compra relacionan una compra con los insumos adquiridos.
 Los detalles de factura relacionan cada factura con los productos vendidos.
 Finalmente, PRODUCTO_INSUMO relaciona productos e insumos, permitiendo representar la relacion N:M establecida por las reglas de negocio.
 
-Politicas de eliminacion y actualizacion
+5. Politicas de eliminacion y actualizacion
 En la mayoria de las claves foraneas se utilizaron:
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
@@ -83,7 +75,7 @@ De manera similar, DETALLE_FACTURA utiliza ON DELETE CASCADE respecto de FACTURA
 Por lo tanto, si se elimina una factura, tambien se eliminan sus detalles.
 Esto evita que queden detalles sin su correspondiente registro principal.
 
-Integridad de Dominio
+6. Integridad de Dominio
 La integridad de dominio permite controlar que valores pueden almacenarse en cada atributo.
 Para ello se utilizaron tipos de datos apropiados, restricciones NOT NULL, CHECK y valores DEFAULT.
 Los identificadores y cantidades utilizan principalmente INT.
@@ -98,7 +90,7 @@ Las medidas ancho y alto de los disenos utilizan:
 DECIMAL(6,2)
 permitiendo almacenar valores con dos posiciones decimales.
 
-Restricciones NOT NULL
+7. Restricciones NOT NULL
 Los atributos obligatorios fueron definidos mediante NOT NULL.
 Por ejemplo, un cliente debe registrar obligatoriamente nombre, apellido, DNI, telefono, correo, direccion y ciudad.
 Un producto debe registrar nombre, precio y stock.
@@ -107,7 +99,7 @@ Una compra debe registrar una fecha y un proveedor.
 Una factura debe registrar fecha, descripcion, cliente, metodo de pago e importe total.
 Esto evita que se almacenen registros incompletos en atributos considerados obligatorios por el modelo.
 
-Valores DEFAULT
+8. Valores DEFAULT
 Se utilizaron valores predeterminados para algunos atributos.
 En PRODUCTO, stock_producto posee:
 DEFAULT 0
@@ -119,7 +111,7 @@ DEFAULT 0
 permitiendo inicializar una factura con un importe igual a cero.
 El DEFAULT, sin embargo, solamente proporciona un valor inicial. No realiza por si mismo el calculo posterior del total de la factura.
 
-Restricciones CHECK
+9. Restricciones CHECK
 Las restricciones CHECK se utilizaron para controlar valores numericos y evitar datos invalidos.
 En PRODUCTO, precio_producto debe ser mayor o igual que cero:
 precio_producto >= 0
@@ -139,7 +131,7 @@ En DETALLE_FACTURA tambien se exige una cantidad mayor que cero y un precio unit
 Finalmente, en PRODUCTO_INSUMO, cantidad_requerida debe ser mayor que cero.
 Estas restricciones permiten que SQL Server rechace automaticamente valores que no respeten las condiciones definidas.
 
-Validacion de las medidas del diseno
+10. Validacion de las medidas del diseno
 La tabla DISENO posee controles adicionales sobre los atributos ancho y alto.
 Se establecio que el ancho, cuando se registre, debe ser mayor que cero:
 ancho IS NULL OR ancho > 0
@@ -147,31 +139,30 @@ La misma condicion se utiliza para el alto:
 alto IS NULL OR alto > 0
 Ademas, se implemento una restriccion para que ambas medidas sean ingresadas conjuntamente.
 Se permite:
-
-que ancho y alto sean nulos;
-
-o que ancho y alto tengan valores.
+- que ancho y alto sean nulos;
+- o que ancho y alto tengan valores.
 No se permite registrar solamente una de las dos medidas.
 De esta manera se evita, por ejemplo, almacenar un diseno con ancho definido pero sin altura.
 Esto es coherente con las reglas RN.12 y RN.14, que indican que las medidas deben registrarse cuando correspondan.
 
-Calculo del precio parcial
+11. Calculo del precio parcial
 La RN.06 establece que el precio parcial de un detalle de factura se obtiene multiplicando la cantidad por el precio unitario.
 Esta regla fue implementada directamente en DETALLE_FACTURA mediante una columna calculada:
+```sql
 precio_parcial AS (
-CONVERT(
-DECIMAL(12,2),
-cantidad * precio_unitario
-)
+    CONVERT(
+        DECIMAL(12,2),
+        cantidad * precio_unitario
+    )
 ) PERSISTED
-
+```
 Por lo tanto, el usuario no necesita ingresar manualmente el precio parcial.
 Por ejemplo, si se registran 2 unidades con un precio unitario de $15.000, SQL Server obtiene automaticamente:
 2 x 15.000 = 30.000
 Esto evita inconsistencias entre la cantidad, el precio unitario y el precio parcial.
 La opcion PERSISTED indica que SQL Server almacena fisicamente el resultado calculado y lo actualiza cuando cambian los valores de los cuales depende.
 
-Reglas que requieren implementacion adicional
+12. Reglas que requieren implementacion adicional
 No todas las reglas de negocio pueden garantizarse unicamente mediante las restricciones incluidas actualmente en el DDL.
 La RN.07 establece que el importe total de una factura debe corresponder a la suma de los precios parciales de sus detalles.
 Actualmente FACTURA.importe_total posee un CHECK que impide valores negativos y un DEFAULT 0, pero estas restricciones no garantizan que el importe total sea igual a la suma de DETALLE_FACTURA.precio_parcial.
@@ -181,37 +172,25 @@ La RN.26 establece que el stock de un insumo debe aumentar cuando se registra un
 El DDL actual garantiza que stock_insumo nunca sea negativo mediante CK_INSUMO_STOCK, pero no realiza automaticamente estos movimientos de stock. Para implementar completamente estas reglas se requiere logica adicional, como triggers o procedimientos almacenados.
 Esta distincion es importante porque permite diferenciar las reglas que ya estan garantizadas estructuralmente por el SGBD de aquellas que requieren mecanismos adicionales.
 
-Verificacion de las restricciones
+13. Verificacion de las restricciones
 Una vez creada la estructura de la base de datos y cargados los datos de prueba mediante DML, las restricciones pueden verificarse realizando operaciones validas e invalidas.
 Entre las pruebas se pueden realizar:
-
-intentar registrar dos provincias con el mismo nombre;
-
-intentar registrar dos clientes con el mismo DNI;
-
-intentar registrar dos clientes con el mismo correo;
-
-intentar registrar un producto con precio negativo;
-
-intentar registrar un producto o insumo con stock negativo;
-
-intentar registrar una cantidad igual a cero en un detalle;
-
-intentar registrar una ciudad perteneciente a una provincia inexistente;
-
-intentar registrar una prenda asociada a un producto inexistente;
-
-intentar registrar una estampa asociada a un diseno inexistente;
-
-intentar registrar una factura para un cliente inexistente;
-
-intentar repetir un producto dentro de una misma factura;
-
-intentar eliminar un registro que este siendo referenciado mediante una FK configurada con NO ACTION.
+- intentar registrar dos provincias con el mismo nombre;
+- intentar registrar dos clientes con el mismo DNI;
+- intentar registrar dos clientes con el mismo correo;
+- intentar registrar un producto con precio negativo;
+- intentar registrar un producto o insumo con stock negativo;
+- intentar registrar una cantidad igual a cero en un detalle;
+- intentar registrar una ciudad perteneciente a una provincia inexistente;
+- intentar registrar una prenda asociada a un producto inexistente;
+- intentar registrar una estampa asociada a un diseno inexistente;
+- intentar registrar una factura para un cliente inexistente;
+- intentar repetir un producto dentro de una misma factura;
+- intentar eliminar un registro que este siendo referenciado mediante una FK configurada con NO ACTION.
 Si las restricciones fueron implementadas correctamente, SQL Server debe rechazar estas operaciones.
 Tambien se pueden ejecutar consultas SELECT para verificar que los datos validos hayan sido almacenados correctamente y que las relaciones entre las tablas coincidan con el modelo disenado.
 
-Conclusion
+14. Conclusion
 La implementacion fisica de NegocioIndumentariaDtf permite mantener la consistencia de los datos mediante diferentes mecanismos proporcionados por SQL Server.
 Las claves primarias garantizan la identificacion unica de los registros, mientras que las claves foraneas mantienen la integridad de las relaciones entre las tablas.
 Las restricciones UNIQUE, NOT NULL, CHECK y DEFAULT permiten controlar duplicados, obligatoriedad, rangos validos y valores iniciales.
