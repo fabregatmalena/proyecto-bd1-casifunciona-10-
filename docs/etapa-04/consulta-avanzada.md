@@ -1,4 +1,4 @@
-# Caso de Uso: Consulta de Clientes con Gastos Superiores a $40.000
+# Consulta de Clientes con Gastos Superiores a $40.000
 
 Esta consulta permite identificar a los clientes que realizaron compras por un importe acumulado superior a $40.000 dentro del negocio de indumentaria y estampados DTF.
 
