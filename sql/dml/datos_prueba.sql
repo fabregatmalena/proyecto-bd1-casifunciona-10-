@@ -2,201 +2,210 @@ USE NegocioIndumentariaDtf;
 GO
 
 
+/* ========================================================================== */
+/* UBICACIÓN, CLIENTES Y PAGOS                                             */
+/* ========================================================================== */
 
 
+/* PROVINCIA */
 
-/* 1. PROVINCIA */
-
-INSERT INTO PROVINCIA(id_provincia, nombre_provincia)
+INSERT INTO PROVINCIA (nombre_provincia)
 VALUES
-    (1, 'Corrientes'),
-    (2, 'Chaco'),
-    (3, 'Misiones'),
-    (4, 'Formosa'),
-    (5, 'Santa Fe'),
-    (6, 'Entre Rios'),
-    (7, 'Cordoba'),
-    (8, 'Buenos Aires'),
-    (9, 'Salta'),
-    (10, 'Jujuy');
+    ('Corrientes'),
+    ('Chaco'),
+    ('Misiones'),
+    ('Formosa'),
+    ('Santa Fe'),
+    ('Entre Rios'),
+    ('Cordoba'),
+    ('Buenos Aires'),
+    ('Salta'),
+    ('Jujuy');
 GO
 
 
-/* 
-   2. CIUDAD */
+/* CIUDAD */
 
-INSERT INTO CIUDAD(id_ciudad, nombre_ciudad, id_provincia)
+INSERT INTO CIUDAD (nombre_ciudad, id_provincia)
 VALUES
-    (1, 'Corrientes Capital', 1),
-    (2, 'Resistencia', 2),
-    (3, 'Posadas', 3),
-    (4, 'Formosa Capital', 4),
-    (5, 'Santa Fe Capital', 5),
-    (6, 'Parana', 6),
-    (7, 'Cordoba Capital', 7),
-    (8, 'La Plata', 8),
-    (9, 'Salta Capital', 9),
-    (10, 'San Salvador de Jujuy', 10);
+    ('Corrientes Capital', 1),
+    ('Resistencia', 2),
+    ('Posadas', 3),
+    ('Formosa Capital', 4),
+    ('Santa Fe Capital', 5),
+    ('Parana', 6),
+    ('Cordoba Capital', 7),
+    ('La Plata', 8),
+    ('Salta Capital', 9),
+    ('San Salvador de Jujuy', 10);
 GO
 
 
-/* 3. CLIENTE */
+/* CLIENTE */
 
-INSERT INTO CLIENTE(id_cliente, nombre_cliente, apellido_cliente, dni_cliente, telefono_cliente, correo_cliente,
+INSERT INTO CLIENTE(nombre_cliente, apellido_cliente, dni_cliente, telefono_cliente, correo_cliente,
     codigo_postal,direccion,id_ciudad)
 VALUES
-    (1, 'Lucia', 'Gomez', '40111222', '3794000001',
-     'lucia.gomez@gmail.com', '3400', 'San Martin 120', 1),
+    ('Lucia', 'Gomez', '40111222', '3794000001', 'lucia.gomez@gmail.com', '3400', 'San Martin 120', 1),
 
-    (2, 'Mateo', 'Fernandez', '41222333', '3624000002',
-     'mateo.fernandez@gmail.com', '3500', 'Belgrano 245', 2),
+    ('Mateo', 'Fernandez', '41222333', '3624000002',  'mateo.fernandez@gmail.com', '3500', 'Belgrano 245', 2),
+   
+    ('Sofia', 'Martinez', '42333444', '3764000003', 'sofia.martinez@gmail.com', '3300', 'Colon 330', 3),
 
-    (3, 'Sofia', 'Martinez', '42333444', '3764000003',
-     'sofia.martinez@gmail.com', '3300', 'Colon 330', 3),
+    ('Tomas', 'Ramirez', '43444555', '3704000004', 'tomas.ramirez@gmail.com', '3600', 'Mitre 415', 4),
 
-    (4, 'Tomas', 'Ramirez', '43444555', '3704000004',
-     'tomas.ramirez@gmail.com', '3600', 'Mitre 415', 4),
+    ('Valentina', 'Lopez', '44555666', '3424000005', 'valentina.lopez@gmail.com', '3000', 'Rivadavia 520', 5),
 
-    (5, 'Valentina', 'Lopez', '44555666', '3424000005',
-     'valentina.lopez@gmail.com', '3000', 'Rivadavia 520', 5),
+    ('Joaquin', 'Sosa', '45666777', '3434000006', 'joaquin.sosa@gmail.com', '3100', 'Urquiza 610', 6),
 
-    (6, 'Joaquin', 'Sosa', '45666777', '3434000006',
-     'joaquin.sosa@gmail.com', '3100', 'Urquiza 610', 6),
+    ('Camila', 'Romero', '46777888', '3514000007', 'camila.romero@gmail.com', '5000', 'Independencia 720', 7),
 
-    (7, 'Camila', 'Romero', '46777888', '3514000007',
-     'camila.romero@gmail.com', '5000', 'Independencia 720', 7),
+    ('Benjamin', 'Acosta', '47888999', '2214000008', 'benjamin.acosta@gmail.com', '1900', 'Calle 7 830', 8),
 
-    (8, 'Benjamin', 'Acosta', '47888999', '2214000008',
-     'benjamin.acosta@gmail.com', '1900', 'Calle 7 830', 8),
+    ('Martina', 'Ruiz', '48999000', '3874000009', 'martina.ruiz@gmail.com', '4400', 'España 940', 9),
 
-    (9, 'Martina', 'Ruiz', '48999000', '3874000009',
-     'martina.ruiz@gmail.com', '4400', 'España 940', 9),
-
-    (10, 'Thiago', 'Diaz', '39000111', '3884000010',
-     'thiago.diaz@gmail.com', '4600', 'Lavalle 1050', 10);
+    ('Thiago', 'Diaz', '39000111', '3884000010', 'thiago.diaz@gmail.com', '4600', 'Lavalle 1050', 10);
 GO
 
+/* ========================================================================== */
+/* CATÁLOGO: PRODUCTOS, DISEÑOS, PRENDAS Y ESTAMPAS                        */
+/* ========================================================================== */
 
-/*  4. METODO_PAGO */
+/*  METODO_PAGO */
 
-INSERT INTO METODO_PAGO (id_metodopago, descripcion)
+INSERT INTO METODO_PAGO (descripcion)
 VALUES
-    (1, 'Efectivo'),
-    (2, 'Transferencia'),
-    (3, 'Tarjeta de debito'),
-    (4, 'Tarjeta de credito'),
-    (5, 'Tarjeta de credito'),
-    (6, 'Efectivo'),
-    (7, 'Tarjeta de debito'),
-    (8, 'Transferencia'),
-    (9, 'Transferencia '),
-    (10, 'Tarjeta de debito');
+    ('Efectivo'),
+    ('Transferencia'),
+    ('Tarjeta de debito'),
+    ('Tarjeta de credito'),
+    ('Billetera Virtual');
 GO
 
 
-/* 5. PRODUCTO */
+/* PRODUCTO */
 
-INSERT INTO PRODUCTO (id_producto, nombre_producto, precio_producto, stock_producto)
+INSERT INTO PRODUCTO (nombre_producto, precio_producto, tipo_producto)
 VALUES
-    (1, 'Remera' 15000.00, 20),
-    (2, 'Buzo perzonalizado', 28000.00, 15),
-    (3, 'Remera', 18000.00, 12),
-    (4, 'Remera personalizada', 12000.00, 18),
-    (5, 'Remera personaliza', 35000.00, 10),
-    (6, 'Estampa estrella', 19000.00, 14),
-    (7, 'Estampa corazon', 30000.00, 11),
-    (8, 'Remera personalizada', 22000.00, 16),
-    (9, 'Remera ', 17000.00, 20),
-    (10, 'Remera personalizada', 20000.00, 13);
+    ('Remera Manga Corta', 15000.00, 'P'),
+    ('Buzo Canguro', 28000.00, 'P'),
+    ('Remera Deportiva', 18000.00, 'P'),
+    ('Chomba', 22000.00, 'P'),
+    ('Buzo Cuello Redondo', 25000.00, 'P'),
+    ('Remera Oversize', 19000.00, 'P'),
+    ('Remera Basica', 15000.00, 'P'),
+    ('Buzo con Cierre', 28000.00, 'P'),
+    ('Musculosa', 18000.00, 'P'),
+    ('Chomba Premium', 22000.00, 'P'),
+    ('Remera Cuello V', 14000.00, 'P'),
+    ('Remera Manga Larga', 14000.00, 'P'),
+    ('Buzo Liso', 24000.00, 'P'),
+    ('Musculosa Deportiva', 17000.00, 'P'),
+    ('Chomba Basica', 21000.00, 'P'),
+    ('Estampa Standard', 15000.00, 'E'),
+    ('Estampa Premium', 12000.00, 'E'),
+    ('Estampa Full Color', 18000.00, 'E'),
+    ('Estampa Basica', 14000.00, 'E'),
+    ('Estampa Vinilo', 16000.00, 'E');
 GO
 
 
-/*6. DISENO*/
+/* DISENO */
 
-INSERT INTO DISENO (id_diseno, color, logotipo, tarifa_base, ancho, alto)
+INSERT INTO DISENO (color, logotipo, tarifa_base, ancho, alto)
 VALUES
-    (1, 'Negro', 'Logo empresa', 2000.00, 10.00, 10.00),
-    (2, 'Blanco', 'Frase personalizada', 2500.00, 20.00, 15.00),
-    (3, 'Rojo', 'Escudo deportivo', 3000.00, 15.00, 18.00),
-    (4, 'Azul', 'Logo emprendimiento', 2200.00, 12.00, 12.00),
-    (5, 'Verde', 'Diseno naturaleza', 2800.00, 20.00, 20.00),
-    (6, 'Negro', 'Diseno minimalista', 1800.00, 8.00, 8.00),
-    (7, 'Blanco', 'Logo grande', 3200.00, 25.00, 20.00),
-    (8, 'Multicolor', 'Diseno personalizado', 3500.00, 20.00, 25.00),
-    (9, 'Azul', 'Diseno deportivo', 2800.00, 18.00, 20.00),
-    (10, 'Rojo', 'Nombre y numero', 2500.00, 20.00, 25.00);
+    ('Negro', 'Estrella', 3000.00, 20.00, 25.00),
+    ('Blanco', 'Bandera', 2500.00, 15.00, 10.00),
+    ('Multicolor', 'Escudo vintage', 3500.00, 25.00, 30.00),
+    ('Azul', 'Corazon', 2000.00, 10.00, 6.00),
+    ('Dorado', 'Logo empresa', 4000.00, 12.00, 15.00),
+    ('Negro', 'Tipografia minimalista', 1500.00, 8.00, 8.00),
+    ('Blanco', 'Calavera', 3200.00, 22.00, 28.00),
+    ('Rojo', 'Numero 10', 2500.00, 18.00, 22.00),
+    ('Verde', 'Hoja ecologica', 2800.00, 15.00, 15.00),
+    ('Multicolor', 'Diseño abstracto', 3800.00, 25.00, 35.00),
+    ('Negro', 'Nombre personalizado', 2200.00, 20.00, 12.00),
+    ('Blanco', 'Logo banda de rock', 3000.00, 10.00, 10.00),
+    ('Amarillo', 'Sol', 1800.00, 12.00, 12.00),
+    ('Rojo', 'Fuego', 3500.00, 18.00, 24.00),
+    ('Gris', 'Geometria', 2600.00, 20.00, 20.00);
 GO
 
 
-/*7. PRENDA*/
+/* PRENDA*/
 
-INSERT INTO PRENDA(id_prenda, id_producto, id_diseno, tipo_de_tela, talle, color)
+INSERT INTO PRENDA(id_producto, tipo_producto, id_diseno, tipo_de_tela, talle, color)
 VALUES
-    (1, 1, 1, 'Algodon', 'S', 'Blanco'),
-    (2, 2, 2, 'Frisa', 'M', 'Negro'),
-    (3, 3, 3, 'Poliester', 'L', 'Azul'),
-    (4, 4, 4, 'Algodon', 'M', 'Rojo'),
-    (5, 5, 5, 'Frisa', 'XL', 'Negro'),
-    (6, 6, 6, 'Algodon', 'L', 'Blanco'),
-    (7, 7, 7, 'Frisa', 'S', 'Gris'),
-    (8, 8, 8, 'Pique', 'M', 'Azul'),
-    (9, 9, 9, 'Poliester', 'L', 'Negro'),
-    (10, 10, 10, 'Algodon', 'XL', 'Rojo');
+   -- Prendas CON diseño
+    (1, 'P', 1, 'Algodon', 'M', 'Blanca'),
+    (2, 'P', 2, 'Frisa', 'L', 'Negro'),
+    (3, 'P', 3, 'Poliester', 'S', 'Azul'),
+    (4, 'P', 4, 'Pique', 'XL', 'Roja'),
+    (5, 'P', 5, 'Frisa', 'M', 'Gris'),
+    (6, 'P', 6, 'Algodon', 'XXL', 'Negra'),
+    (7, 'P', 7, 'Algodon', 'L', 'Verde'),
+    (8, 'P', 8, 'Frisa', 'S', 'Azul'),
+    (9, 'P', 9, 'Poliester', 'M', 'Blanca'),
+    (10, 'P', 10, 'Pique', 'L', 'Negra'),
+
+    -- Prendas LISAS sin diseño 
+    (11, 'P', NULL, 'Algodon', 'M', 'Negra'),
+    (12, 'P', NULL, 'Algodon', 'L', 'Blanca'),
+    (13, 'P', NULL, 'Frisa', 'XL', 'Gris'),
+    (14, 'P', NULL, 'Poliester', 'S', 'Azul'),
+    (15, 'P', NULL, 'Pique', 'XXL', 'Blanca');
 GO
 
 
-/* 8. ESTAMPA*/
+/*  ESTAMPA*/
 
-INSERT INTO ESTAMPA (id_estampa, id_producto, id_diseno)
+INSERT INTO ESTAMPA (id_producto, tipo_producto, id_diseno)
 VALUES
-    (1, 1, 1),
-    (2, 2, 2),
-    (3, 3, 3),
-    (4, 4, 4),
-    (5, 5, 5),
-    (6, 6, 6),
-    (7, 7, 7),
-    (8, 8, 8),
-    (9, 9, 9),
-    (10, 10, 10);
+   (16, 'E', 11),
+    (17, 'E', 12),
+    (18, 'E', 13),
+    (19, 'E', 14),
+    (20, 'E', 15);
 GO
 
 
-/*9. PROVEEDOR */
+/* PROVEEDOR */
 
-INSERT INTO PROVEEDOR (id_proveedor, nombre_proveedor, correo_proveedor, telefono_proveedor)
+INSERT INTO PROVEEDOR (nombre_proveedor, correo_proveedor, telefono_proveedor)
 VALUES
-    (1, 'Textil Norte', 'ventas@textilnorte.com', '3794100001'),
-    (2, 'Insumos DTF', 'ventas@insumosdtf.com', '3794100002'),
-    (3, 'Grafica NEA', 'contacto@graficanea.com', '3794100003'),
-    (4, 'Textiles del Litoral', 'ventas@textileslitoral.com', '3794100004'),
-    (5, 'Distribuidora Print', 'info@distribuidoraprint.com', '3794100005'),
-    (6, 'Estampa Insumos', 'ventas@estampainsumos.com', '3794100006'),
-    (7, 'Mundo Textil', 'contacto@mundotextil.com', '3794100007'),
-    (8, 'Print Color', 'ventas@printcolor.com', '3794100008'),
-    (9, 'Insumos Creativos', 'info@insumoscreativos.com', '3794100009'),
-    (10, 'Grafica Total', 'ventas@graficatotal.com', '3794100010');
+    ('Textil Norte', 'ventas@textilnorte.com', '3794100001'),
+    ('Insumos DTF', 'ventas@insumosdtf.com', '3794100002'),
+    ('Grafica NEA', 'contacto@graficanea.com', '3794100003'),
+    ('Textiles del Litoral', 'ventas@textileslitoral.com', '3794100004'),
+    ('Distribuidora Print', 'info@distribuidoraprint.com', '3794100005'),
+    ('Estampa Insumos', 'ventas@estampainsumos.com', '3794100006'),
+    ('Mundo Textil', 'contacto@mundotextil.com', '3794100007'),
+    ('Print Color', 'ventas@printcolor.com', '3794100008'),
+    ('Insumos Creativos', 'info@insumoscreativos.com', '3794100009'),
+    ('Grafica Total', 'ventas@graficatotal.com', '3794100010');
 GO
 
 
-/*10. INSUMO */
+/* INSUMO */
 
-INSERT INTO INSUMO (id_insumo, tipo_insumo, stock_insumo)
+-- se omite el stock inicial porque entra por la compra
+
+INSERT INTO INSUMO (tipo_insumo)
 VALUES
-    (1, 'Tinta DTF negra', 50),
-    (2, 'Tinta DTF blanca', 50),
-    (3, 'Film DTF', 80),
-    (4, 'Polvo DTF', 60),
-    (5, 'Tela de algodon', 100),
-    (6, 'Tela de poliester', 70),
-    (7, 'Vinilo textil', 40),
-    (8, 'Papel transfer', 75),
-    (9, 'Tinta para dtf', 45),
-    (10, 'Tela pique', 90);
+    ('Tinta DTF negra'),
+    ('Tinta DTF blanca'),
+    ('Film DTF'),
+    ('Polvo DTF'),
+    ('Tela de algodon'),
+    ('Tela de poliester'),
+    ('Vinilo textil'),
+    ('Papel transfer'),
+    ('Tinta para dtf'),
+    ('Tela pique');
 GO
 
 
-/* 11. PRODUCTO_INSUMO*/
+/*  PRODUCTO_INSUMO */
 
 INSERT INTO PRODUCTO_INSUMO (id_producto, id_insumo, cantidad_requerida)
 VALUES
@@ -215,67 +224,66 @@ GO
 
 /* 12. COMPRA*/
 
-INSERT INTO COMPRA (id_compra, fecha_compra, id_proveedor)
+-- se omite la fecha porque tiene DEFAULT GETDATE(), se pone hoy automáticamente
+
+INSERT INTO COMPRA (id_proveedor)
 VALUES
-    (1, '2026-09-01', 1),
-    (2, '2026-09-02', 2),
-    (3, '2026-09-03', 3),
-    (4, '2026-09-04', 4),
-    (5, '2026-09-05', 5),
-    (6, '2026-09-06', 6),
-    (7, '2026-09-07', 7),
-    (8, '2026-09-08', 8),
-    (9, '2026-09-09', 9),
-    (10, '2026-09-10', 10);
+    (1), (2), (3), (4), (5), (6), (7), (8), (9), (10);
 GO
 
 
-/* 13. DETALLE_COMPRA*/
+/* DETALLE_COMPRA*/
 
-INSERT INTO DETALLE_COMPRA (id_detalle_compra, id_compra, id_insumo, cantidad, precio_unitario_compra)
+INSERT INTO DETALLE_COMPRA (id_compra, id_insumo, cantidad, precio_unitario_compra)
 VALUES
-    (1, 1, 5, 100, 4500.00),
-    (2, 2, 1, 50, 6000.00),
-    (3, 3, 3, 80, 3500.00),
-    (4, 4, 6, 70, 5000.00),
-    (5, 5, 4, 60, 4000.00),
-    (6, 6, 7, 40, 5500.00),
-    (7, 7, 2, 50, 6500.00),
-    (8, 8, 9, 45, 7000.00),
-    (9, 9, 8, 75, 3000.00),
-    (10, 10, 10, 90, 4800.00);
+    (1, 5, 100, 4500.00),
+    (2, 1, 50, 6000.00),
+    (3, 3, 80, 3500.00),
+    (4, 6, 70, 5000.00),
+    (5, 4, 60, 4000.00),
+    (6, 7, 40, 5500.00),
+    (7, 2, 50, 6500.00),
+    (8, 9, 45, 7000.00),
+    (9, 8, 75, 3000.00),
+    (10, 10, 90, 4800.00);
 GO
 
+
+/* ========================================================================== */
+/* 4. VENTAS / FACTURACIÓN                                                    */
+/* ========================================================================== */
 
 /* 14. FACTURA */
 
-INSERT INTO FACTURA( id_factura,  fecha_factura,  descripcion,  id_cliente, id_metodopago, importe_total)
+-- se omite la fecha porque tiene DEFAULT GETDATE() y el total se calcula después
+INSERT INTO FACTURA(descripcion, id_cliente, id_metodopago)
 VALUES
-    (1, '2026-09-11', 'Venta de Remera', 1, 1, 30000.00),
-    (2, '2026-09-12', 'Venta de Buzo perzonalizado', 2, 2, 28000.00),
-    (3, '2026-09-13', 'Venta de Remera', 3, 3, 54000.00),
-    (4, '2026-09-14', 'Venta de Remera personalizada ', 4, 4, 24000.00),
-    (5, '2026-09-15', 'Venta de Remera personalizada', 5, 5, 35000.00),
-    (6, '2026-09-16', 'Venta de Estampa estrella', 6, 6, 38000.00),
-    (7, '2026-09-17', 'Venta de Estampa corazon', 7, 7, 30000.00),
-    (8, '2026-09-18', 'Venta de Remera personalizada', 8, 8, 44000.00),
-    (9, '2026-09-19', 'Venta de Remera', 9, 9, 51000.00),
-    (10, '2026-09-20', 'Venta de Remera personalizada', 10, 10, 20000.00);
+    ('Venta de Remera', 1, 1),
+    ('Venta de Buzo personalizado', 2, 2),
+    ('Venta de Remera', 3, 3),
+    ('Venta de Remera personalizada', 4, 4),
+    ('Venta de Buzo Negro', 5, 5),
+    ('Venta de Estampa estrella', 6, 1),
+    ('Venta de Estampa corazon', 7, 2),
+    ('Venta de Estampa logo', 8, 3),
+    ('Venta de Estampa', 9, 4),
+    ('Venta de Estampa nombre', 10, 5);
 GO
 
 
 /* 15. DETALLE_FACTURA */
 
-INSERT INTO DETALLE_FACTURA(id_detalle_factura, id_factura, id_producto, cantidad, precio_unitario)
+-- se omite precio_parcial porque es calculado/PERSISTED
+INSERT INTO DETALLE_FACTURA(id_factura, id_producto, cantidad, precio_unitario)
 VALUES
-    (1, 1, 1, 2, 15000.00),
-    (2, 2, 2, 1, 28000.00),
-    (3, 3, 3, 3, 18000.00),
-    (4, 4, 4, 2, 12000.00),
-    (5, 5, 5, 1, 35000.00),
-    (6, 6, 6, 2, 19000.00),
-    (7, 7, 7, 1, 30000.00),
-    (8, 8, 8, 2, 22000.00),
-    (9, 9, 9, 3, 17000.00),
-    (10, 10, 10, 1, 20000.00);
+    (1, 1, 2, 15000.00),
+    (2, 2, 1, 28000.00),
+    (3, 3, 3, 18000.00),
+    (4, 4, 2, 12000.00),
+    (5, 5, 1, 35000.00),
+    (6, 6, 2, 19000.00),
+    (7, 7, 1, 30000.00),
+    (8, 8, 2, 22000.00),
+    (9, 9, 3, 17000.00),
+    (10, 10, 1, 20000.00);
 GO
