@@ -110,7 +110,8 @@ Se agregó cada empleado al rol que corresponde a sus tareas.
 Como inicialmente se habían otorgado permisos de lectura directamente a
 los empleados, se revocaron esos permisos individuales para que el
 acceso quedara administrado mediante los roles.
-<img width="1366" height="768" alt="img7" src="https://github.com/user-attachments/assets/24bee27a-49ac-4e3f-a731-03603e0fb474" />
+<img width="1366" height="768" alt="img_reemplazo1" src="https://github.com/user-attachments/assets/03d8e3c5-feea-47c8-862f-f76a548e528f" />
+
 ## 6. Pruebas realizadas y resultados obtenidos
 
 Para comprobar la implementación se realizaron pruebas ejecutando
@@ -149,55 +150,18 @@ GO
 
 REVERT;
 GO
+```
 ### 6.3. Prueba de operación no autorizada
 
 Se intentó ejecutar una operación `DELETE` sobre la tabla `CLIENTE`
 utilizando el contexto del empleado de ventas.
 
-``` sql
-USE NegocioIndumentariaDtf;
-GO
-
-EXECUTE AS USER = 'empleado_ventas';
-GO
-
-DELETE FROM CLIENTE
-WHERE 1 = 0;
-GO
-
-REVERT;
-GO
 <img width="1366" height="768" alt="img8" src="https://github.com/user-attachments/assets/ff6a1296-9203-49a2-96ea-5539a752ac30" />
+
 ### 6.4. Verificación de usuarios y roles
 
 Por último, se consultaron las relaciones entre los usuarios y los roles
 de la base de datos.
 
-``` sql
-USE NegocioIndumentariaDtf;
-GO
+<img width="1366" height="768" alt="img_reemplazo3" src="https://github.com/user-attachments/assets/cbf85bff-93a9-4b76-be75-29525a91c683" />
 
-SELECT
-    R.name AS Nombre_Rol,
-    U.name AS Nombre_Usuario
-FROM sys.database_role_members RM
-INNER JOIN sys.database_principals R
-    ON RM.role_principal_id = R.principal_id
-INNER JOIN sys.database_principals U
-    ON RM.member_principal_id = U.principal_id
-WHERE U.name IN (
-    'admin_indumentaria',
-    'empleado_ventas',
-    'empleado_stock'
-);
-GO
-```
-
-**Resultado esperado y verificado:** se identificaron las siguientes
-pertenencias:
-
-  Rol            Usuario
-  -------------- ----------------------
-  `db_owner`     `admin_indumentaria`
-  `rol_ventas`   `empleado_ventas`
-  `rol_stock`    `empleado_stock`
