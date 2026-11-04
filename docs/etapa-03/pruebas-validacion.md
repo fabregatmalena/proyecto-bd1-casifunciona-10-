@@ -23,9 +23,6 @@ El esquema físico se implementó en SQL Server mediante 15 tablas vinculadas, o
   * Se habilitó `ON DELETE CASCADE` únicamente en detalles dependientes (`COMPRA` $\rightarrow$ `DETALLE_COMPRA` y `FACTURA` $\rightarrow$ `DETALLE_FACTURA`).
 * **Unicidad (`UNIQUE`):** Restricción de duplicados en DNI y correos electrónicos, nombres de provincia, pares `(nombre_ciudad, id_provincia)` y renglones de detalle `(id_factura, id_producto)`.
 * **Reglas de Dominio (`CHECK` y `DEFAULT`):** Precios, tarifas y totales con valor $\ge 0$; cantidades estrictamente $> 0$; stock inicial con `DEFAULT 0`. En `DISENO`, se obliga a registrar ancho y alto conjuntamente (ambos mayores a cero o ambos nulos).
-* **Columna Calculada Persistida:** En `DETALLE_FACTURA`, el subtotal se genera de forma determinística como:
-  $$\text{precio\_parcial} = \text{cantidad} \times \text{precio\_unitario}$$
-  Al ser `PERSISTED`, el motor garantiza consistencia aritmética y optimiza consultas sin recarga de cómputo.
 
 ---
 
