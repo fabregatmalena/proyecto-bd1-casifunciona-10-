@@ -1,3 +1,8 @@
+USE [master]
+GO
+
+CREATE DATABASE [NegocioIndumentariaDtf]
+GO
 USE NegocioIndumentariaDtf;
 GO
 
@@ -7,7 +12,7 @@ GO
 /* TABLA PROVINCIA */
 
 CREATE TABLE PROVINCIA (
-    id_provincia INT NOT NULL,
+    id_provincia INT IDENTITY(1,1) NOT NULL,
     nombre_provincia VARCHAR(50) NOT NULL,
 
     CONSTRAINT PK_PROVINCIA PRIMARY KEY (id_provincia),
@@ -20,7 +25,7 @@ GO
 /* TABLA CIUDAD: PROVINCIA 1:N CIUDAD */
 
 CREATE TABLE CIUDAD (
-    id_ciudad INT NOT NULL,
+    id_ciudad INT IDENTITY(1,1) NOT NULL,
     nombre_ciudad VARCHAR(50) NOT NULL,
     id_provincia INT NOT NULL,
 
@@ -38,7 +43,7 @@ GO
 /* TABLA CLIENTE: CIUDAD 1:N CLIENTE */
 
 CREATE TABLE CLIENTE (
-    id_cliente INT NOT NULL,
+    id_cliente INT IDENTITY(1,1) NOT NULL,
     nombre_cliente VARCHAR(50) NOT NULL,
     apellido_cliente VARCHAR(50) NOT NULL,
     dni_cliente VARCHAR(20) NOT NULL,
@@ -62,11 +67,10 @@ GO
 /* TABLA METODO_PAGO */
 
 CREATE TABLE METODO_PAGO (
-    id_metodopago INT NOT NULL,
+    id_metodopago INT IDENTITY(1,1) NOT NULL,
     descripcion VARCHAR(50) NOT NULL,
-    CONSTRAINT PK_METODO_PAGO
-        PRIMARY KEY (id_metodopago),
 
+    CONSTRAINT PK_METODO_PAGO PRIMARY KEY (id_metodopago),
     CONSTRAINT UQ_METODO_PAGO_DESCRIPCION UNIQUE (descripcion)
 );
 
@@ -78,18 +82,19 @@ GO
 /* PRODUCTO */
 
 CREATE TABLE PRODUCTO (
-    id_producto INT NOT NULL,
+    id_producto INT IDENTITY(1,1) NOT NULL,
     nombre_producto VARCHAR(60) NOT NULL,
     precio_producto DECIMAL(10,2) NOT NULL,
-    stock_producto INT NOT NULL
-
-    CONSTRAINT DF_PRODUCTO_STOCK DEFAULT 0,
+    stock_producto INT NOT NULL CONSTRAINT DF_PRODUCTO_STOCK DEFAULT 0,
+    tipo_producto CHAR(1) NOT NULL, -- 'P' para Prenda, 'E' para Estampa, pues no puede ser ambos
+       
 
     CONSTRAINT PK_PRODUCTO PRIMARY KEY (id_producto),
-
     CONSTRAINT CK_PRODUCTO_PRECIO CHECK (precio_producto >= 0),
-
-    CONSTRAINT CK_PRODUCTO_STOCK CHECK (stock_producto >= 0)
+    CONSTRAINT CK_PRODUCTO_STOCK CHECK (stock_producto >= 0),
+    CONSTRAINT CK_PRODUCTO_TIPO CHECK (tipo_producto IN ('P', 'E')),
+    -- Clave única combinada para la herencia exclusiva
+    CONSTRAINT UQ_PRODUCTO_TIPO UNIQUE (id_producto, tipo_producto)
 );
 
 GO
@@ -98,31 +103,21 @@ GO
 /* DISENO */
 
 CREATE TABLE DISENO (
-    id_diseno INT NOT NULL,
+    id_diseno INT IDENTITY(1,1) NOT NULL,
     color VARCHAR(30),
     logotipo VARCHAR(100),
     tarifa_base DECIMAL(10,2) NOT NULL,
     ancho DECIMAL(6,2),
     alto DECIMAL(6,2),
 
-    CONSTRAINT PK_DISENO
-        PRIMARY KEY (id_diseno),
-
-    CONSTRAINT CK_DISENO_TARIFA
-        CHECK (tarifa_base >= 0),
-
-    CONSTRAINT CK_DISENO_ANCHO
-        CHECK (ancho IS NULL OR ancho > 0),
-
-    CONSTRAINT CK_DISENO_ALTO
-        CHECK (alto IS NULL OR alto > 0),
-
-    CONSTRAINT CK_DISENO_MEDIDAS
-        CHECK (
-            (ancho IS NULL AND alto IS NULL)
-            OR
-            (ancho IS NOT NULL AND alto IS NOT NULL)
-        )
+    CONSTRAINT PK_DISENO PRIMARY KEY (id_diseno),
+    CONSTRAINT CK_DISENO_TARIFA CHECK (tarifa_base >= 0),
+    CONSTRAINT CK_DISENO_ANCHO CHECK (ancho IS NULL OR ancho > 0),
+    CONSTRAINT CK_DISENO_ALTO CHECK (alto IS NULL OR alto > 0),
+    CONSTRAINT CK_DISENO_MEDIDAS CHECK ( (ancho IS NULL AND alto IS NULL)
+                                          OR
+                                          (ancho IS NOT NULL AND alto IS NOT NULL)
+                                        )
 );
 GO
 
@@ -130,24 +125,28 @@ GO
 /* PRENDA */
 
 CREATE TABLE PRENDA (
-    id_prenda INT NOT NULL,
+    id_prenda INT IDENTITY(1,1) NOT NULL,
     id_producto INT NOT NULL,
     id_diseno INT NULL,
     tipo_de_tela VARCHAR(40) NOT NULL,
     talle VARCHAR(10) NOT NULL,
     color VARCHAR(30) NOT NULL,
+    tipo_producto CHAR(1) NOT NULL CONSTRAINT DF_PRENDA_TIPO DEFAULT 'P',
 
-    CONSTRAINT PK_PRENDA PRIMARY KEY (id_prenda),
+    
 
+-- Clave Primaria Compuesta 
+    CONSTRAINT PK_PRENDA PRIMARY KEY (id_prenda, id_producto),
+
+-- Unicidad para asegurar relación 1 a 1 con el padre
     CONSTRAINT UQ_PRENDA_PRODUCTO UNIQUE (id_producto),
+    CONSTRAINT CK_PRENDA_TIPO CHECK (tipo_producto = 'P'),
 
-    CONSTRAINT FK_PRENDA_PRODUCTO FOREIGN KEY (id_producto) REFERENCES PRODUCTO(id_producto)
-        ON DELETE NO ACTION
-        ON UPDATE NO ACTION,
-
+    -- Restricción foránea al padre producto
+    CONSTRAINT FK_PRENDA_PRODUCTO FOREIGN KEY (id_producto, tipo_producto) 
+        REFERENCES PRODUCTO(id_producto, tipo_producto) 
+        ON DELETE CASCADE,
     CONSTRAINT FK_PRENDA_DISENO FOREIGN KEY (id_diseno) REFERENCES DISENO(id_diseno)
-        ON DELETE NO ACTION
-        ON UPDATE NO ACTION
 );
 
 GO
@@ -156,19 +155,24 @@ GO
 /* ESTAMPA */
 
 CREATE TABLE ESTAMPA (
-    id_estampa INT NOT NULL,
+    id_estampa INT IDENTITY(1,1) NOT NULL,
     id_producto INT NOT NULL,
     id_diseno INT NOT NULL,
+    tipo_producto CHAR(1) NOT NULL CONSTRAINT DF_ESTAMPA_TIPO DEFAULT 'E',
 
-    CONSTRAINT PK_ESTAMPA PRIMARY KEY (id_estampa),
+
+    -- Clave Primaria Compuesta 
+    CONSTRAINT PK_ESTAMPA PRIMARY KEY (id_estampa, id_producto),    
+
+    -- Unicidad para asegurar relación 1 a 1 con el padre producto
     CONSTRAINT UQ_ESTAMPA_PRODUCTO UNIQUE (id_producto),
-    CONSTRAINT FK_ESTAMPA_PRODUCTO FOREIGN KEY (id_producto) REFERENCES PRODUCTO(id_producto)
-        ON DELETE NO ACTION
-        ON UPDATE NO ACTION,
-
+    CONSTRAINT CK_ESTAMPA_TIPO CHECK (tipo_producto = 'E'),    
+    
+    -- Restricción foránea al padre producto
+    CONSTRAINT FK_ESTAMPA_PRODUCTO FOREIGN KEY (id_producto, tipo_producto) 
+        REFERENCES PRODUCTO(id_producto, tipo_producto) 
+        ON DELETE CASCADE,
     CONSTRAINT FK_ESTAMPA_DISENO FOREIGN KEY (id_diseno) REFERENCES DISENO(id_diseno)
-        ON DELETE NO ACTION
-        ON UPDATE NO ACTION
 );
 
 GO
@@ -180,7 +184,7 @@ GO
 /* PROVEEDOR */
 
 CREATE TABLE PROVEEDOR (
-    id_proveedor INT NOT NULL,
+    id_proveedor INT IDENTITY(1,1) NOT NULL,
     nombre_proveedor VARCHAR(60) NOT NULL,
     correo_proveedor VARCHAR(100) NOT NULL,
     telefono_proveedor VARCHAR(25) NOT NULL,
@@ -195,11 +199,10 @@ GO
 /* INSUMO */
 
 CREATE TABLE INSUMO (
-    id_insumo INT NOT NULL,
+    id_insumo INT IDENTITY(1,1) NOT NULL,
     tipo_insumo VARCHAR(60) NOT NULL,
-    stock_insumo INT NOT NULL
+    stock_insumo INT NOT NULL  CONSTRAINT DF_INSUMO_STOCK DEFAULT 0,
 
-    CONSTRAINT DF_INSUMO_STOCK DEFAULT 0,
     CONSTRAINT PK_INSUMO PRIMARY KEY (id_insumo),
     CONSTRAINT CK_INSUMO_STOCK CHECK (stock_insumo >= 0)
 );
@@ -210,9 +213,11 @@ GO
 /* COMPRA: PROVEEDOR 1:N COMPRA */
 
 CREATE TABLE COMPRA (
-    id_compra INT NOT NULL,
-    fecha_compra DATE NOT NULL,
+    id_compra INT IDENTITY(1,1) NOT NULL,
+    fecha_compra DATE NOT NULL CONSTRAINT DF_COMPRA_FECHA DEFAULT GETDATE(),
     id_proveedor INT NOT NULL,
+
+    
 
     CONSTRAINT PK_COMPRA PRIMARY KEY (id_compra),
     CONSTRAINT FK_COMPRA_PROVEEDOR FOREIGN KEY (id_proveedor) REFERENCES PROVEEDOR(id_proveedor)
@@ -226,7 +231,7 @@ GO
 /* DETALLE_COMPRA */
 
 CREATE TABLE DETALLE_COMPRA (
-    id_detalle_compra INT NOT NULL,
+    id_detalle_compra INT IDENTITY(1,1) NOT NULL,
     id_compra INT NOT NULL,
     id_insumo INT NOT NULL,
     cantidad INT NOT NULL,
@@ -277,14 +282,14 @@ GO
 /* FACTURA */
 
 CREATE TABLE FACTURA (
-    id_factura INT NOT NULL,
-    fecha_factura DATE NOT NULL,
+    id_factura INT IDENTITY(1,1) NOT NULL,
+    fecha_factura DATE NOT NULL CONSTRAINT DF_FACTURA_FECHA DEFAULT GETDATE(),
     descripcion VARCHAR(150) NOT NULL,
     id_cliente INT NOT NULL,
     id_metodopago INT NOT NULL,
+    importe_total DECIMAL(12,2) NOT NULL  CONSTRAINT DF_FACTURA_TOTAL DEFAULT 0,
 
-    importe_total DECIMAL(12,2) NOT NULL
-        CONSTRAINT DF_FACTURA_TOTAL DEFAULT 0,
+   
 
     CONSTRAINT PK_FACTURA PRIMARY KEY (id_factura),
     CONSTRAINT FK_FACTURA_CLIENTE FOREIGN KEY (id_cliente) REFERENCES CLIENTE(id_cliente)
@@ -304,18 +309,17 @@ GO
 /* DETALLE_FACTURA */
 
 CREATE TABLE DETALLE_FACTURA (
-    id_detalle_factura INT NOT NULL,
+    id_detalle_factura INT IDENTITY(1,1) NOT NULL,
     id_factura INT NOT NULL,
     id_producto INT NOT NULL,
     cantidad INT NOT NULL,
     precio_unitario DECIMAL(10,2) NOT NULL,
 
-    precio_parcial AS (
-        CONVERT(
-            DECIMAL(12,2),
-            cantidad * precio_unitario
-        )
-    ) PERSISTED,
+    -- Columna calculada para el precio parcial del detalle, a partir de la cantidad y precio unitario
+    precio_parcial AS ( CONVERT(
+                           DECIMAL(12,2),
+                           cantidad * precio_unitario )
+                      ) PERSISTED,
 
     CONSTRAINT PK_DETALLE_FACTURA PRIMARY KEY (id_detalle_factura, id_factura),
 
@@ -332,4 +336,5 @@ CREATE TABLE DETALLE_FACTURA (
     CONSTRAINT UQ_DETALLE_FACTURA_PRODUCTO UNIQUE (id_factura, id_producto)
 );
 GO
+
 
