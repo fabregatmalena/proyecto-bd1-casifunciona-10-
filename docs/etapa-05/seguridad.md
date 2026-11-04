@@ -160,7 +160,7 @@ utilizando el contexto del empleado de ventas.
 
 ### 6.4. Verificación de usuarios y roles
 
-Por último, se consultaron las relaciones entre los usuarios y los roles
+Y por ultimo, se consultaron las relaciones entre los usuarios y los roles
 de la base de datos.
 
 <img width="1366" height="768" alt="img_reemplazo3" src="https://github.com/user-attachments/assets/cbf85bff-93a9-4b76-be75-29525a91c683" />
