@@ -1,456 +1,541 @@
-<div align="center">
+ <div align="center">
 
 # NegocioIndumentariaDtf
 
-### Sistema de gestión para una fábrica textil de impresiones DTF y prendas personalizadas
+### Sistema de gestión de datos para un negocio de indumentaria personalizada y estampados DTF
+
+**Proyecto Integrador · Base de Datos I · 2026**
 
 ![UNNE](https://img.shields.io/badge/UNNE-FaCENA-003366?style=flat-square)
-![Base de Datos](https://img.shields.io/badge/Base%20de%20Datos-I-007acc?style=flat-square)
-![Proyecto Integrador](https://img.shields.io/badge/Proyecto%20Integrador-2026-e65100?style=flat-square)
-![Equipo](https://img.shields.io/badge/Equipo-10-2e7d32?style=flat-square)
-![SQL Server](https://img.shields.io/badge/SGBD-SQL%20Server-CC292B?style=flat-square)
+![Equipo](https://img.shields.io/badge/Equipo-10%20CasiFunciona-2E7D32?style=flat-square)
+![SQL Server](https://img.shields.io/badge/SQL%20Server-T--SQL-CC292B?style=flat-square)
+![Etapas](https://img.shields.io/badge/Etapas-5-1565C0?style=flat-square)
+![Tablas](https://img.shields.io/badge/Modelo%20físico-15%20tablas-6A1B9A?style=flat-square)
 
-**Universidad Nacional del Nordeste — FaCENA**  
-**Base de Datos I — Proyecto Integrador 2026**  
+**Universidad Nacional del Nordeste**  
+Facultad de Ciencias Exactas y Naturales y Agrimensura  
 **Equipo 10 — CasiFunciona**
+
+---
+
+**[Documentación](docs/) · [Scripts SQL](sql/) · [Etapa V](docs/etapa-05/)**
 
 </div>
 
 ---
 
-# 📑 Índice
+## Índice
 
-1. [Presentación del proyecto](#1-presentación-del-proyecto)
-2. [Problemática y solución propuesta](#2-problemática-y-solución-propuesta)
-3. [Objetivos del proyecto](#3-objetivos-del-proyecto)
-4. [Alcance del sistema](#4-alcance-del-sistema)
-5. [Diseño y modelado de la base de datos](#5-diseño-y-modelado-de-la-base-de-datos)
-6. [Reglas de negocio](#6-reglas-de-negocio)
-7. [Documentación por etapas](#7-documentación-por-etapas)
-8. [Estructura del repositorio](#8-estructura-del-repositorio)
-9. [Implementación en SQL Server](#9-implementación-en-sql-server)
-10. [Consultas SQL y reportes](#10-consultas-sql-y-reportes)
-11. [Seguridad y optimización](#11-seguridad-y-optimización)
-12. [Tecnologías utilizadas](#12-tecnologías-utilizadas)
-13. [Integrantes del equipo](#13-integrantes-del-equipo)
-14. [Conclusión](#14-conclusión)
+### Presentación del proyecto
 
----
+- [Descripción del proyecto](#descripción-del-proyecto)
+- [Objetivos y alcance](#objetivos-y-alcance)
+- [Diseño de la base de datos](#diseño-de-la-base-de-datos)
 
-# 1. Presentación del proyecto
+### Desarrollo del proyecto por etapas
 
-**NegocioIndumentariaDtf** es un proyecto de base de datos relacional desarrollado para gestionar las operaciones de un emprendimiento dedicado a la producción y comercialización de prendas personalizadas y estampados mediante la técnica DTF (*Direct to Film*).
+- [Desarrollo por etapas](#desarrollo-por-etapas)
+  - [Etapa I — Requerimientos y dominio del negocio](#etapa-i--requerimientos-y-dominio-del-negocio)
+  - [Etapa II — Modelado conceptual y lógico](#etapa-ii--modelado-conceptual-y-lógico)
+  - [Etapa III — Implementación física](#etapa-iii--implementación-física)
+  - [Etapa IV — Consultas SQL y explotación de datos](#etapa-iv--consultas-sql-y-explotación-de-datos)
+  - [Etapa V — Funcionalidades avanzadas de SQL Server](#etapa-v--funcionalidades-avanzadas-de-sql-server)
 
-El proyecto fue realizado como parte de la asignatura **Base de Datos I**, correspondiente a la Facultad de Ciencias Exactas y Naturales y Agrimensura (FaCENA) de la Universidad Nacional del Nordeste (UNNE).
+### Funcionalidades avanzadas — Etapa V
 
-Su finalidad es diseñar e implementar una base de datos que permita organizar la información del negocio, relacionar sus diferentes áreas y facilitar la administración de las operaciones comerciales.
+- [Desarrollo técnico de la Etapa V](#funcionalidades-avanzadas--etapa-v)
+  - [Procedimientos almacenados y funciones](#procedimientos-almacenados-y-funciones)
+  - [Manejo de transacciones](#manejo-de-transacciones)
+  - [Triggers de auditoría](#triggers-de-auditoría)
+  - [Seguridad de la base de datos](#seguridad-de-la-base-de-datos)
+  - [Índices y optimización de consultas](#índices-y-optimización-de-consultas)
 
-El sistema contempla la gestión de clientes, productos, prendas, estampas, diseños, proveedores, insumos, compras, facturas y métodos de pago.
+### Documentación técnica y organización
 
-Para su desarrollo se utilizó Microsoft SQL Server como sistema gestor de bases de datos y SQL Server Management Studio (SSMS) como herramienta de implementación y administración.
+- [Estructura del repositorio](#estructura-del-repositorio)
+- [Instalación y ejecución](#instalación-y-ejecución)
+- [Integridad y validación](#integridad-y-validación)
+- [Tecnologías utilizadas](#tecnologías-utilizadas)
+- [Organización del equipo](#organización-del-equipo)
+- [Conclusión](#conclusión)
 
----
+### Acceso directo a la documentación
 
-# 2. Problemática y solución propuesta
-
-## 2.1. Problemática
-
-En un negocio dedicado a la fabricación y venta de indumentaria personalizada es necesario administrar una gran cantidad de información relacionada con productos, materiales, proveedores, clientes y operaciones comerciales.
-
-Cuando estos datos se registran de manera independiente o desorganizada, pueden presentarse dificultades como:
-
-- Duplicación de información.
-- Errores en el registro de ventas.
-- Falta de control sobre los productos disponibles.
-- Dificultad para identificar proveedores.
-- Inconsistencias entre las compras y las existencias de insumos.
-- Pérdida de información sobre operaciones anteriores.
-- Problemas para obtener informes de ventas.
-
-Estas situaciones pueden afectar la organización del negocio y dificultar la toma de decisiones.
-
-## 2.2. Solución propuesta
-
-Para resolver estas dificultades se propone implementar una base de datos relacional que permita centralizar la información.
-
-Mediante esta solución se busca:
-
-- Registrar y administrar clientes.
-- Organizar el catálogo de productos.
-- Identificar prendas, estampas y diseños.
-- Registrar proveedores e insumos.
-- Administrar compras y ventas.
-- Mantener la integridad de los datos.
-- Consultar información comercial.
-- Controlar los permisos de acceso.
-- Optimizar el rendimiento de las consultas.
+| Etapa | Documentación |
+|---|---|
+| **Etapa I** — Requerimientos y dominio del negocio | [Ver documentación](docs/etapa-01/) |
+| **Etapa II** — Modelado conceptual y lógico | [Ver documentación](docs/etapa-02/) |
+| **Etapa III** — Implementación física | [Ver documentación](docs/etapa-03/) |
+| **Etapa IV** — Consultas SQL | [Ver documentación](docs/etapa-04/) |
+| **Etapa V** — Funcionalidades avanzadas | [Ver documentación](docs/etapa-05/) |
 
 ---
 
-# 3. Objetivos del proyecto
+# Descripción del proyecto
+
+**NegocioIndumentariaDtf** es un proyecto académico que consiste en el análisis, diseño e implementación de una base de datos relacional para un negocio dedicado a la comercialización de indumentaria personalizada y estampados mediante tecnología DTF (*Direct to Film*).
+
+El propósito del proyecto es representar las operaciones principales del negocio mediante una estructura de datos organizada, que permita almacenar información, establecer relaciones entre entidades y realizar consultas de manera consistente.
+
+El sistema contempla la administración de clientes, productos, prendas, estampas, diseños, proveedores, insumos, compras, facturas y métodos de pago.
+
+## Problemática identificada
+
+Un negocio de indumentaria personalizada necesita administrar información relacionada con diferentes operaciones comerciales.
+
+Cuando los registros se encuentran dispersos o no existe una estructura definida, pueden producirse:
+
+- Duplicación e inconsistencias de información.
+- Errores en el registro de ventas y compras.
+- Dificultades para consultar productos y proveedores.
+- Problemas para relacionar facturas con sus detalles.
+- Falta de control sobre los insumos utilizados.
+- Dificultades para obtener información comercial.
+
+## Solución propuesta
+
+Se desarrolló una base de datos relacional que organiza la información en tablas vinculadas mediante claves primarias y foráneas.
+
+Esta estructura permite representar las operaciones del negocio y aplicar restricciones destinadas a mantener la integridad de los datos.
+
+---
+
+# Objetivos y alcance
 
 ## Objetivo general
 
-Diseñar e implementar una base de datos relacional para administrar la información de un negocio de indumentaria personalizada y estampados DTF, aplicando los conocimientos adquiridos durante el cursado de Base de Datos I.
+Diseñar e implementar una base de datos relacional para administrar la información de un negocio de indumentaria personalizada, aplicando los conceptos de modelado, normalización, implementación física, consultas SQL y administración de bases de datos.
 
 ## Objetivos específicos
 
 - Analizar los requerimientos del negocio.
-- Identificar las entidades y relaciones necesarias.
-- Definir reglas de negocio.
+- Identificar las entidades y sus relaciones.
+- Establecer las reglas de negocio.
 - Elaborar el Diagrama Entidad-Relación.
-- Transformar el modelo conceptual en un modelo relacional.
-- Aplicar las formas normales correspondientes.
-- Implementar la base de datos mediante scripts SQL.
-- Definir claves primarias y foráneas.
-- Aplicar restricciones de integridad.
-- Insertar datos de prueba.
-- Desarrollar consultas SQL.
-- Implementar mecanismos de seguridad.
-- Analizar estrategias de optimización mediante índices.
-- Documentar las etapas del proyecto.
+- Transformar el modelo conceptual al modelo relacional.
+- Aplicar las primeras tres formas normales.
+- Implementar las tablas mediante T-SQL.
+- Definir restricciones de integridad.
+- Incorporar datos de prueba.
+- Desarrollar consultas y reportes.
+- Implementar procedimientos almacenados y funciones.
+- Aplicar el manejo de transacciones.
+- Utilizar triggers para registrar modificaciones.
+- Administrar usuarios, roles y permisos.
+- Analizar la optimización de consultas mediante índices.
 
----
+## Alcance funcional
 
-# 4. Alcance del sistema
-
-La base de datos contempla las siguientes áreas:
-
-| Área | Descripción |
+| Área | Funcionalidad |
 |---|---|
-| Clientes | Registro de información personal y datos de contacto. |
-| Ubicación | Organización de ciudades y provincias. |
-| Productos | Administración del catálogo de productos comercializados. |
-| Prendas | Registro de características como talle, color y tipo de tela. |
-| Estampas | Administración de productos correspondientes a estampados. |
-| Diseños | Registro de diseños utilizados para personalizar productos. |
-| Facturación | Registro de facturas y sus detalles. |
-| Métodos de pago | Identificación del medio de pago utilizado. |
-| Proveedores | Administración de los proveedores del negocio. |
-| Insumos | Registro de materiales utilizados en la producción. |
-| Compras | Registro de adquisiciones realizadas a proveedores. |
-| Consultas | Obtención de información comercial y reportes. |
-| Seguridad | Administración de usuarios, roles y permisos. |
-| Optimización | Evaluación del rendimiento de consultas mediante índices. |
+| Clientes | Registro y consulta de información personal y de contacto. |
+| Ubicación | Organización de provincias y ciudades. |
+| Productos | Administración del catálogo comercial. |
+| Prendas y estampas | Registro de características específicas. |
+| Diseños | Administración de diseños relacionados con los productos. |
+| Proveedores | Registro de información de proveedores. |
+| Insumos | Administración de materiales utilizados. |
+| Compras | Registro de adquisiciones y sus detalles. |
+| Facturación | Registro de ventas y productos comercializados. |
+| Métodos de pago | Identificación de los medios de pago. |
+| Consultas | Obtención de información comercial. |
+| Administración | Seguridad, auditoría y optimización de consultas. |
 
 ---
 
-# 5. Diseño y modelado de la base de datos
+# Diseño de la base de datos
 
-Durante el desarrollo se aplicaron los conceptos de modelado conceptual, lógico y físico.
+El diseño se desarrolló mediante tres niveles: conceptual, lógico y físico.
 
-## 5.1. Modelo conceptual
+## Modelo conceptual
 
-Se elaboró un Diagrama Entidad-Relación (DER) para representar las entidades del sistema, sus atributos y las relaciones existentes.
+Se elaboró un **Diagrama Entidad-Relación (DER)** utilizando la notación de Peter Chen.
 
-Se utilizó la notación de Peter Chen para identificar:
+El modelo permitió representar las entidades, sus atributos, relaciones y cardinalidades antes de realizar la implementación en SQL Server.
 
-- Entidades.
-- Atributos.
-- Relaciones.
-- Cardinalidades.
-- Claves identificadoras.
+<div align="center">
 
-El diagrama permitió representar el funcionamiento del negocio antes de implementar las tablas.
+### Diagrama Entidad-Relación
 
-## 5.2. Modelo relacional
+![Diagrama Entidad-Relación](docs/etapa-02/DER/der.png)
 
-A partir del modelo conceptual se realizó la transformación al modelo relacional.
+[Ver diagrama completo](docs/etapa-02/DER/der.png)
 
-Se definieron las tablas, sus atributos y las claves necesarias para relacionar la información.
+</div>
 
-Entre las entidades principales se encuentran:
+## Modelo relacional
 
-- `CLIENTE`
-- `CIUDAD`
-- `PROVINCIA`
-- `PRODUCTO`
-- `PRENDA`
-- `ESTAMPA`
-- `DISENO`
-- `FACTURA`
-- `DETALLE_FACTURA`
-- `METODO_PAGO`
-- `PROVEEDOR`
-- `INSUMO`
-- `COMPRA`
-- `DETALLE_COMPRA`
+A partir del modelo conceptual se realizó la transformación al modelo relacional, definiendo tablas, atributos y claves.
 
-También se contemplan las relaciones asociativas definidas durante el modelado.
+La implementación física contiene **15 tablas**, organizadas según las operaciones del negocio.
 
-## 5.3. Especialización de productos
+| Área | Tablas |
+|---|---|
+| Ubicación y clientes | `PROVINCIA`, `CIUDAD`, `CLIENTE` |
+| Medios de pago | `METODO_PAGO` |
+| Catálogo de productos | `PRODUCTO`, `PRENDA`, `ESTAMPA`, `DISENO` |
+| Proveedores e insumos | `PROVEEDOR`, `INSUMO`, `PRODUCTO_INSUMO` |
+| Compras | `COMPRA`, `DETALLE_COMPRA` |
+| Ventas | `FACTURA`, `DETALLE_FACTURA` |
 
-Una de las decisiones de diseño fue utilizar `PRODUCTO` como entidad general.
+### Decisiones de diseño relevantes
 
-A partir de esta entidad se organizaron las especializaciones correspondientes a prendas y estampas.
+**Especialización de productos**
 
-Esta decisión permite representar las características generales de los productos y, al mismo tiempo, almacenar los atributos específicos de cada categoría.
+Se utilizó `PRODUCTO` como entidad general, vinculada con las entidades específicas `PRENDA` y `ESTAMPA`.
 
-## 5.4. Normalización
+Esto permite organizar los atributos comunes y diferenciar las características particulares de cada tipo de producto.
 
-El modelo fue analizado aplicando las tres primeras formas normales.
+**Organización de ubicaciones**
 
-### Primera Forma Normal (1FN)
+Se separó la información geográfica mediante las entidades `PROVINCIA` y `CIUDAD`, relacionadas con `CLIENTE`.
 
-Se organizaron los atributos para almacenar valores atómicos y evitar grupos repetitivos.
+**Relaciones entre operaciones y detalles**
 
-### Segunda Forma Normal (2FN)
+Se utilizaron tablas de detalle para representar los elementos que forman parte de las compras y las facturas.
 
-Se analizaron las dependencias funcionales para evitar dependencias parciales respecto de las claves.
+**Relación entre productos e insumos**
 
-### Tercera Forma Normal (3FN)
+La tabla `PRODUCTO_INSUMO` permite representar la asociación entre los productos y los materiales utilizados.
 
-Se revisaron las dependencias transitivas y se separó la información en entidades relacionadas.
+## Normalización
 
-Un ejemplo es la organización de los datos geográficos mediante las tablas `CLIENTE`, `CIUDAD` y `PROVINCIA`.
+El modelo fue analizado aplicando las tres primeras formas normales:
 
-La normalización contribuye a disminuir redundancias y mejorar la consistencia de la información.
+| Forma normal | Aplicación |
+|---|---|
+| **1FN** | Organización de atributos con valores atómicos y eliminación de grupos repetitivos. |
+| **2FN** | Análisis de dependencias funcionales para evitar dependencias parciales. |
+| **3FN** | Revisión de dependencias transitivas y separación de información redundante. |
 
----
+Este proceso contribuyó a mejorar la organización del modelo y reducir posibles anomalías en las operaciones sobre los datos.
 
-# 6. Reglas de negocio
+**Documentación relacionada:**
 
-Las reglas de negocio establecen las condiciones que deben cumplirse para garantizar el correcto funcionamiento del sistema.
-
-Durante el desarrollo se definieron **31 reglas de negocio**.
-
-Entre las principales se encuentran:
-
-1. Todo cliente debe registrarse con sus datos correspondientes.
-2. Un cliente puede estar relacionado con varias facturas.
-3. Cada factura debe identificar al cliente correspondiente.
-4. Las facturas deben contener información de los productos vendidos.
-5. Cada detalle debe registrar la cantidad y el precio unitario.
-6. El importe parcial se obtiene multiplicando la cantidad por el precio unitario.
-7. El importe total corresponde a la suma de los importes parciales.
-8. Los productos deben contar con información que permita identificarlos.
-9. Las prendas y estampas deben conservar sus características específicas.
-10. Las compras deben estar relacionadas con sus proveedores.
-11. Los insumos deben registrarse para permitir su administración.
-12. Las relaciones entre las entidades deben respetar las restricciones de integridad.
-
-La documentación completa se encuentra en:
-
-📄 [Reglas de negocio](docs/etapa-01/reglas-negocio.md)
+- [Modelo relacional](docs/etapa-02/modelo-relacional.md)
+- [Decisiones de diseño](docs/etapa-02/decisiones-diseno.md)
+- [Proceso de normalización](docs/etapa-02/normalizacion.md)
 
 ---
 
-# 7. Documentación por etapas
+# Desarrollo por etapas
 
-La documentación del proyecto se encuentra organizada dentro de la carpeta `docs`.
+El proyecto se encuentra organizado en cinco etapas, cada una relacionada con los contenidos desarrollados durante la asignatura.
 
-Cada etapa contiene los documentos correspondientes a las actividades desarrolladas.
+## Etapa I — Requerimientos y dominio del negocio
 
-## ETAPA 1 — Requerimientos y dominio del negocio
+**Objetivo:** comprender el funcionamiento del negocio y establecer las condiciones que debe cumplir la base de datos.
 
-Durante esta etapa se realizó el análisis inicial del negocio.
+Se realizó el análisis inicial del sistema, identificando la problemática, los objetivos, el alcance y las reglas de negocio.
 
-Se identificaron la problemática, los objetivos, el alcance y las reglas que determinan su funcionamiento.
-
-### Archivos
+Durante esta etapa se elaboraron **31 reglas de negocio**, utilizadas como referencia para el diseño posterior.
 
 | Documento | Descripción |
 |---|---|
-| [Requerimientos y dominio del negocio](docs/etapa-01/Requerimientos-y-dominio-del-negocio.md) | Presentación del problema, contexto y alcance del sistema. |
-| [Reglas de negocio](docs/etapa-01/reglas-negocio.md) | Definición de las reglas que deben cumplirse. |
+| [Requerimientos y dominio del negocio](docs/etapa-01/Requerimientos-y-dominio-del-negocio.md) | Contexto, problemática y alcance del proyecto. |
+| [Reglas de negocio](docs/etapa-01/reglas-negocio.md) | Condiciones que regulan el funcionamiento del sistema. |
 
 ---
 
-## ETAPA 2 — Modelado conceptual y lógico
+## Etapa II — Modelado conceptual y lógico
 
-En esta etapa se desarrolló el diseño conceptual y lógico de la base de datos.
+**Objetivo:** representar las entidades y relaciones del negocio y transformarlas en una estructura relacional.
 
-Se elaboró el DER y posteriormente se transformó en un modelo relacional.
-
-También se realizó el proceso de normalización.
-
-### Archivos
+Se elaboró el DER, se definieron las relaciones entre entidades y se aplicó el proceso de normalización.
 
 | Documento | Descripción |
 |---|---|
 | [Diagrama Entidad-Relación](docs/etapa-02/DER/der.png) | Representación gráfica del modelo conceptual. |
 | [Decisiones de diseño](docs/etapa-02/decisiones-diseno.md) | Justificación de las decisiones tomadas. |
-| [Modelo relacional](docs/etapa-02/modelo-relacional.md) | Descripción de tablas, atributos y relaciones. |
+| [Modelo relacional](docs/etapa-02/modelo-relacional.md) | Estructura lógica de la base de datos. |
 | [Normalización](docs/etapa-02/normalizacion.md) | Aplicación de 1FN, 2FN y 3FN. |
 
 ---
 
-## ETAPA 3 — Implementación física
+## Etapa III — Implementación física
 
-En esta etapa se implementó la estructura de la base de datos utilizando SQL Server.
+**Objetivo:** implementar el modelo relacional en Microsoft SQL Server.
 
-Se desarrollaron scripts DDL para crear las tablas y definir las restricciones.
+Se desarrollaron scripts DDL para crear la base de datos y sus tablas, definiendo tipos de datos, claves y restricciones.
 
-También se utilizaron instrucciones DML para insertar datos de prueba.
+También se incorporaron datos de prueba mediante instrucciones DML y se documentaron las verificaciones realizadas.
 
-### Actividades realizadas
+| Recurso | Descripción |
+|---|---|
+| [Implementación física](docs/etapa-03/implementacion.md) | Desarrollo de la estructura de la base de datos. |
+| [Restricciones de integridad](docs/etapa-03/restricciones-integridad.md) | Documentación de las restricciones aplicadas. |
+| [Pruebas y validación](docs/etapa-03/pruebas-validacion.md) | Verificación de la implementación. |
+| [Script DDL](sql/ddl/crear_bd.sql) | Creación de la base de datos y sus tablas. |
+| [Script DML](sql/dml/datos_prueba.sql) | Inserción de datos de prueba. |
 
-- Creación de tablas.
-- Definición de claves primarias.
-- Definición de claves foráneas.
-- Implementación de restricciones.
-- Inserción de datos.
-- Verificación de relaciones.
-- Pruebas de integridad.
+---
+
+## Etapa IV — Consultas SQL y explotación de datos
+
+**Objetivo:** recuperar y analizar información comercial mediante consultas SQL.
+
+Se desarrollaron tres casos orientados a obtener información de las operaciones registradas.
+
+### Comprobante de venta
+
+Permite consultar los datos de una factura y los productos incluidos en ella.
+
+### Consulta avanzada
+
+Utiliza operaciones de combinación, agrupamiento y filtrado para analizar información comercial.
+
+### Informe de ventas
+
+Permite obtener información agrupada sobre las ventas registradas.
+
+| Caso | Documentación | Script SQL |
+|---|---|---|
+| Comprobante de venta | [Ver documento](docs/etapa-04/comprobante-venta.md) | [Ver script](sql/consultas/comprobante_venta.sql) |
+| Consulta avanzada | [Ver documento](docs/etapa-04/consulta-avanzada.md) | [Ver script](sql/consultas/consulta_avanzada.sql) |
+| Informe de ventas | [Ver documento](docs/etapa-04/informe-ventas.md) | [Ver script](sql/consultas/informe_ventas.sql) |
+
+**Documentación complementaria:** [Casos de uso](docs/etapa-04/Casos-uso.md).
+
+---
+
+## Etapa V — Funcionalidades avanzadas de SQL Server
+
+**Objetivo:** estudiar y aplicar herramientas de programación, control de operaciones, auditoría, seguridad y optimización de bases de datos.
+
+Se desarrollaron cinco temas, cada uno relacionado con una situación del sistema.
+
+| Tema | Aplicación |
+|---|---|
+| Procedimientos y funciones | Actualización de stock y consulta del gasto acumulado de clientes. |
+| Manejo de transacciones | Confirmación y cancelación de operaciones de venta. |
+| Triggers de auditoría | Registro de cambios en los precios de productos. |
+| Seguridad | Administración de usuarios, roles y permisos. |
+| Índices y optimización | Análisis del rendimiento de consultas sobre datos históricos. |
+
+**[Acceder a la documentación de la Etapa V](docs/etapa-05/)**
+
+---
+
+# Funcionalidades avanzadas — Etapa V
+
+En esta etapa se investigaron diferentes herramientas de SQL Server Express y se desarrollaron ejemplos relacionados con el funcionamiento del negocio.
+
+## Procedimientos almacenados y funciones
+
+**Responsable:** Lucía Belén Fernández.
+
+Los procedimientos almacenados permiten agrupar instrucciones SQL para ejecutar operaciones específicas.
+
+Las funciones permiten realizar cálculos y devolver resultados que pueden utilizarse dentro de consultas.
+
+### Aplicación al proyecto
+
+**`sp_ActualizarStockInsumo`**
+
+Procedimiento almacenado que permite incrementar la cantidad disponible de un insumo.
+
+El ejemplo recibe el identificador del insumo y la cantidad que se desea agregar.
+
+**`fn_TotalCompradoCliente`**
+
+Función utilizada para consultar el importe acumulado de las compras realizadas por un cliente.
+
+El repositorio incluye consultas que utilizan esta función para obtener el gasto histórico de los clientes.
 
 ### Archivos
 
-| Documento | Descripción |
+- [Investigación](docs/etapa-05/procedimientos_funciones/investigacion.md)
+- [Script del procedimiento](sql/tecnico/procedimiento.sql)
+- [Consultas de la función](sql/tecnico/funcion.sql)
+
+### Evidencias
+
+| Evidencia | Archivo |
 |---|---|
-| [Implementación](docs/etapa-03/implementacion.md) | Descripción de la implementación física. |
-| [Restricciones de integridad](docs/etapa-03/restricciones-integridad.md) | Documentación de las restricciones utilizadas. |
-| [Pruebas y validación](docs/etapa-03/pruebas-validacion.md) | Verificación del funcionamiento de la base de datos. |
-
-### Scripts SQL
-
-- [Creación de la base de datos](sql/ddl/crear_bd.sql)
-- [Inserción de datos de prueba](sql/dml/datos_prueba.sql)
+| Consulta de la función | [Ver imagen](docs/etapa-05/procedimientos_funciones/evidencias/funcion.png) |
+| Stock antes del procedimiento | [Ver imagen](docs/etapa-05/procedimientos_funciones/evidencias/procedimiento_antes.png) |
+| Stock después del procedimiento | [Ver imagen](docs/etapa-05/procedimientos_funciones/evidencias/procedimiento_despues.png) |
 
 ---
 
-## ETAPA 4 — Consultas SQL y explotación de datos
+## Manejo de transacciones
 
-En esta etapa se desarrollaron consultas destinadas a obtener información útil para la administración del negocio.
+**Responsable:** Pared Ifran Maitena.
 
-Se aplicaron operaciones de selección, combinación de tablas, agrupamiento y funciones de agregación.
+El manejo de transacciones permite agrupar varias instrucciones SQL dentro de una unidad lógica de trabajo.
 
-### Casos desarrollados
+Su utilización resulta importante cuando una operación requiere modificar diferentes tablas relacionadas.
 
-**Caso 1: Comprobante de venta**
+### Instrucciones utilizadas
 
-Permite obtener información detallada de una factura, incluyendo cliente, productos, cantidades, precios y subtotales.
+- `BEGIN TRANSACTION`: inicia una transacción.
+- `COMMIT TRANSACTION`: confirma los cambios.
+- `ROLLBACK TRANSACTION`: cancela los cambios no confirmados.
+- `TRY...CATCH`: permite controlar determinados errores durante la ejecución.
 
-**Caso 2: Consulta avanzada**
+### Aplicación al proyecto
 
-Permite identificar clientes que superan un importe determinado de compras.
+Se utilizó como ejemplo el registro de una venta mediante las tablas `FACTURA` y `DETALLE_FACTURA`.
 
-**Caso 3: Informe de ventas**
+Se realizaron tres pruebas:
 
-Permite analizar los productos comercializados, las unidades vendidas y los ingresos obtenidos.
+| Prueba | Descripción | Resultado |
+|---|---|---|
+| **COMMIT** | Registro de una factura con dos productos. | Se confirmó una venta por $58.000. |
+| **ROLLBACK** | Modificación temporal de la fecha de una factura. | Se recuperó la fecha original. |
+| **ROLLBACK ante un error** | Inserción de un detalle con un producto inexistente. | Se canceló la transacción por una restricción de clave foránea. |
 
-### Documentación
+### Entorno utilizado
 
-| Documento | Descripción |
-|---|---|
-| [Casos de uso](docs/etapa-04/Casos-uso.md) | Presentación de las consultas desarrolladas. |
-| [Comprobante de venta](docs/etapa-04/comprobante-venta.md) | Explicación de la consulta del comprobante. |
-| [Consulta avanzada](docs/etapa-04/consulta-avanzada.md) | Consulta de clientes según sus compras. |
-| [Informe de ventas](docs/etapa-04/informe-ventas.md) | Análisis de las operaciones comerciales. |
+Las pruebas se realizaron en una base de práctica denominada `NegocioEstampadosEtapa3`.
 
-### Scripts SQL
+Esta base contiene una estructura de facturación similar a la del proyecto, aunque presenta diferencias en los nombres de algunas columnas.
 
-- [Comprobante de venta](sql/consultas/comprobante_venta.sql)
-- [Consulta avanzada](sql/consultas/consulta_avanzada.sql)
-- [Informe de ventas](sql/consultas/informe_ventas.sql)
+Por este motivo, el script documenta la demostración realizada en el entorno de práctica y no debe ejecutarse directamente sobre `NegocioIndumentariaDtf` sin adaptarlo.
+
+### Archivos
+
+- [Investigación sobre transacciones](docs/etapa-05/transacciones/investigacion.md)
+- [Script SQL de las pruebas](sql/tecnico/transacciones.sql)
+- [Documentación de evidencias](docs/etapa-05/transacciones/evidencias/README.md)
 
 ---
 
-## ETAPA 5 — Implementación de funcionalidades avanzadas
+## Triggers de auditoría
 
-Esta etapa está orientada a incorporar y analizar funcionalidades avanzadas de SQL Server.
+**Responsable:** Lucía Belén Fernández.
 
-Los temas abordados comprenden:
+Los triggers son objetos de SQL Server que permiten ejecutar instrucciones automáticamente cuando se producen determinados eventos sobre una tabla.
 
-- Procedimientos almacenados y funciones.
-- Manejo de transacciones.
-- Triggers de auditoría.
-- Seguridad de la base de datos.
-- Índices y optimización de consultas.
+### Aplicación al proyecto
 
-Para los trabajos prácticos se utiliza una organización que permite separar la investigación teórica, los scripts de demostración y las evidencias obtenidas.
+Se desarrolló un ejemplo de auditoría para registrar modificaciones realizadas sobre los precios de los productos.
 
-### Procedimientos almacenados y funciones
+El trigger utilizado se denomina:
 
-Los procedimientos almacenados permiten agrupar instrucciones SQL que pueden ejecutarse cuando una operación lo requiere.
+`trg_AuditoriaCambioPrecio`
 
-Las funciones permiten realizar operaciones y devolver valores o conjuntos de datos.
+Su finalidad es registrar información relacionada con los cambios de precio.
 
-Su utilización contribuye a organizar y reutilizar instrucciones.
+La demostración contempla una tabla de auditoría denominada:
 
-### Manejo de transacciones
+`AUDITORIA_PRECIO_PRODUCTO`
 
-Las transacciones permiten ejecutar varias operaciones como una unidad lógica de trabajo.
+Esta permite conservar información sobre el producto modificado, los valores anteriores y nuevos, la fecha de la operación y el usuario correspondiente.
 
-En SQL Server se utilizan instrucciones como:
+### Archivos
 
-- `BEGIN TRANSACTION`
-- `COMMIT TRANSACTION`
-- `ROLLBACK TRANSACTION`
+- [Investigación sobre triggers](docs/etapa-05/triggers_auditoria/investigacion.md)
+- [Script SQL](docs/etapa-05/triggers_auditoria/script.sql)
 
-Estas instrucciones permiten confirmar operaciones realizadas correctamente o deshacer cambios cuando es necesario.
+### Evidencias
 
-En el sistema NegocioIndumentariaDtf, las transacciones pueden aplicarse al registro de facturas y sus correspondientes detalles.
+| Evidencia | Archivo |
+|---|---|
+| Estado anterior | [Ver imagen](docs/etapa-05/triggers_auditoria/evidencias/pre_trigger.png) |
+| Estado posterior | [Ver imagen](docs/etapa-05/triggers_auditoria/evidencias/post_trigger.png) |
+| Consulta de auditoría | [Ver imagen](docs/etapa-05/triggers_auditoria/evidencias/consulta_tabla_fantasma.png) |
 
-### Triggers de auditoría
+---
 
-Los triggers son mecanismos que permiten ejecutar instrucciones automáticamente cuando se producen determinados eventos en una tabla.
+## Seguridad de la base de datos
 
-Pueden utilizarse para registrar modificaciones y mantener información de auditoría.
+La seguridad permite controlar el acceso de los usuarios y determinar qué operaciones pueden realizar sobre la información almacenada.
 
-### Seguridad
+### Aplicación al proyecto
 
-La seguridad permite administrar el acceso de los usuarios a la base de datos.
+Se trabajó con la creación de usuarios y roles para representar diferentes responsabilidades dentro del negocio.
 
-Se utilizan mecanismos como:
+Los perfiles utilizados en el ejemplo incluyen:
 
-- Inicios de sesión.
-- Usuarios.
-- Roles.
-- Permisos.
-- `GRANT`
-- `REVOKE`
+- Administrador.
+- Empleado de ventas.
+- Empleado de stock.
 
-### Índices y optimización
+Se utilizaron instrucciones de T-SQL para crear usuarios, asignar roles y establecer permisos.
 
-Los índices permiten mejorar el acceso a determinados datos y pueden reducir el costo de algunas consultas.
+Entre ellas se encuentran:
 
-Durante las pruebas se analizan aspectos como:
+`CREATE LOGIN`, `CREATE USER`, `CREATE ROLE`, `ALTER ROLE` y `GRANT`.
 
-- Índices agrupados.
-- Índices no agrupados.
-- Planes de ejecución.
+### Archivos
+
+- [Investigación sobre seguridad](docs/etapa-05/seguridad/seguridad.md)
+- [Script SQL](sql/tecnico/seguridad.sql)
+
+**Consideración de seguridad:** las credenciales incluidas en scripts de demostración deben reemplazarse por contraseñas seguras antes de utilizarse en un entorno real.
+
+---
+
+## Índices y optimización de consultas
+
+**Responsable:** Malena Ayelén Fabregat.
+
+La optimización de consultas busca mejorar la eficiencia con la que SQL Server recupera información.
+
+Los índices pueden facilitar el acceso a los registros, aunque también requieren recursos de almacenamiento y mantenimiento.
+
+### Aplicación al proyecto
+
+Se desarrolló una demostración utilizando una tabla de prueba denominada:
+
+`FACTURA_HISTORICA`
+
+El script contempla la generación de un conjunto de datos de hasta **1.000.000 de registros** para comparar el comportamiento de consultas con diferentes condiciones de indexación.
+
+Se analizaron aspectos como:
+
+- Índices agrupados y no agrupados.
+- Recorridos de tablas.
+- Búsquedas mediante índices.
 - Lecturas lógicas.
 - Tiempo de ejecución.
+- Planes de ejecución.
 
-### Documentación y archivos de la etapa 5
+Para obtener estadísticas se utilizaron instrucciones como:
 
-| Tema | Documentación | Script |
-|---|---|---|
-| Procedimientos y funciones | `docs/etapa-05/procedimientos_funciones/investigacion.md` | `docs/etapa-05/procedimientos_funciones/scripts.sql` |
-| Transacciones | [Investigación](docs/etapa-05/transacciones/investigacion.md) | [Script](docs/etapa-05/transacciones/scripts.sql) |
-| Triggers de auditoría | `docs/etapa-05/triggers_auditoria/investigacion.md` | `docs/etapa-05/triggers_auditoria/scripts.sql` |
-| Seguridad | [Documentación](docs/etapa-05/seguridad.md) | [Script SQL](sql/tecnico/seguridad.sql) |
-| Índices y optimización | [Documentación](docs/etapa-05/indices-optimizacion.md) | [Script SQL](sql/tecnico/indices.sql) |
+```sql
+SET STATISTICS TIME ON;
+SET STATISTICS IO ON;
+```
 
-**Nota:** los trabajos de procedimientos, funciones y triggers deben vincularse cuando se encuentren incorporados al repositorio.
+Estas herramientas permiten observar el comportamiento de las consultas y evaluar el efecto de los índices.
+
+### Archivos
+
+- [Investigación sobre índices](docs/etapa-05/indices/indices-optimizacion.md)
+- [Script SQL de optimización](sql/tecnico/indices.sql)
 
 ---
 
-# 8. Estructura del repositorio
+# Estructura del repositorio
 
-El repositorio está organizado para separar la documentación académica de los scripts SQL utilizados en la implementación.
+El repositorio se encuentra organizado en dos directorios principales:
 
-La estructura general es la siguiente:
+- **`docs/`**: documentación académica correspondiente a las cinco etapas.
+- **`sql/`**: scripts de creación, inserción, consultas y funcionalidades avanzadas.
+
+La estructura principal es la siguiente:
 
 ```text
 proyecto-bd1-casifunciona-10-/
 │
 ├── docs/
-│   │
 │   ├── etapa-01/
 │   │   ├── Requerimientos-y-dominio-del-negocio.md
 │   │   └── reglas-negocio.md
 │   │
 │   ├── etapa-02/
 │   │   ├── DER/
+│   │   │   └── der.png
 │   │   ├── decisiones-diseno.md
 │   │   ├── modelo-relacional.md
 │   │   └── normalizacion.md
 │   │
 │   ├── etapa-03/
 │   │   ├── implementacion.md
-│   │   ├── restricciones-integridad.md
-│   │   └── pruebas-validacion.md
+│   │   ├── pruebas-validacion.md
+│   │   └── restricciones-integridad.md
 │   │
 │   ├── etapa-04/
 │   │   ├── Casos-uso.md
@@ -459,27 +544,26 @@ proyecto-bd1-casifunciona-10-/
 │   │   └── informe-ventas.md
 │   │
 │   └── etapa-05/
-│       │
 │       ├── procedimientos_funciones/
 │       │   ├── investigacion.md
-│       │   ├── scripts.sql
 │       │   └── evidencias/
 │       │
 │       ├── transacciones/
 │       │   ├── investigacion.md
-│       │   ├── scripts.sql
 │       │   └── evidencias/
 │       │
 │       ├── triggers_auditoria/
 │       │   ├── investigacion.md
-│       │   ├── scripts.sql
+│       │   ├── script.sql
 │       │   └── evidencias/
 │       │
-│       ├── seguridad.md
-│       └── indices-optimizacion.md
+│       ├── seguridad/
+│       │   └── seguridad.md
+│       │
+│       └── indices/
+│           └── indices-optimizacion.md
 │
 ├── sql/
-│   │
 │   ├── ddl/
 │   │   └── crear_bd.sql
 │   │
@@ -492,252 +576,143 @@ proyecto-bd1-casifunciona-10-/
 │   │   └── informe_ventas.sql
 │   │
 │   └── tecnico/
+│       ├── procedimiento.sql
+│       ├── funcion.sql
+│       ├── transacciones.sql
 │       ├── seguridad.sql
 │       └── indices.sql
 │
 ├── .gitignore
+├── proyecto-bd1-casifunciona-10-.slnx
 └── README.md
 ```
 
-**Observación:** la estructura de la etapa 5 representa la organización prevista. Algunos archivos pueden encontrarse pendientes de incorporación.
+Esta organización permite separar los documentos explicativos del código SQL y facilita la revisión de los archivos correspondientes a cada etapa.
 
 ---
 
-# 9. Implementación en SQL Server
+# Instalación y ejecución
 
-La implementación física se realizó utilizando Microsoft SQL Server y el lenguaje T-SQL.
+## Requisitos
 
-## 9.1. Requisitos
-
-Para ejecutar el proyecto se requiere:
+Para trabajar con el proyecto se recomienda disponer de:
 
 - Microsoft SQL Server.
 - SQL Server Management Studio (SSMS).
-- Acceso a una instancia de SQL Server.
-- Scripts SQL incluidos en el repositorio.
-
-## 9.2. Creación de la base de datos
-
-La base de datos del proyecto se denomina:
-
-`NegocioIndumentariaDtf`
-
-El archivo principal de creación se encuentra en:
-
-[sql/ddl/crear_bd.sql](sql/ddl/crear_bd.sql)
-
-Antes de ejecutarlo, se debe revisar si el script crea la base de datos o si requiere que esta exista previamente.
-
-En caso de que sea necesario crearla manualmente, se puede utilizar:
-
-```sql
-CREATE DATABASE NegocioIndumentariaDtf;
-GO
-
-USE NegocioIndumentariaDtf;
-GO
-```
-
-## 9.3. Creación de tablas
-
-Mediante instrucciones DDL se definen:
-
-- Tablas.
-- Columnas.
-- Tipos de datos.
-- Claves primarias.
-- Claves foráneas.
-- Restricciones de integridad.
-
-## 9.4. Carga de datos
-
-Una vez creada la estructura se ejecuta el archivo:
-
-[sql/dml/datos_prueba.sql](sql/dml/datos_prueba.sql)
-
-Este script permite incorporar datos de prueba para verificar el funcionamiento del modelo.
-
-## 9.5. Ejecución de consultas
-
-Después de cargar los datos se pueden ejecutar los scripts ubicados en:
-
-[sql/consultas/](sql/consultas/)
-
-Las consultas permiten obtener comprobantes, identificar clientes y generar informes comerciales.
-
-## 9.6. Ejecución de scripts técnicos
-
-Los scripts técnicos de seguridad y optimización se encuentran en:
-
-[sql/tecnico/](sql/tecnico/)
-
-Se recomienda ejecutarlos en un entorno de prueba y revisar previamente los permisos requeridos.
+- Una instancia de SQL Server con permisos para crear bases de datos.
+- Los archivos del repositorio.
 
 ---
 
-# 10. Consultas SQL y reportes
+# Integridad y validación
 
-Las consultas desarrolladas durante la etapa 4 permiten obtener información relevante para el funcionamiento del negocio.
+Durante el desarrollo del proyecto se aplicaron mecanismos para mantener la consistencia de la información.
 
-## 10.1. Comprobante de venta
+## Integridad de entidad
 
-Esta consulta permite visualizar el detalle de una factura.
+Se definieron claves primarias para identificar los registros de las tablas.
 
-Se relacionan las tablas correspondientes a:
+## Integridad referencial
 
-- Factura.
-- Cliente.
-- Método de pago.
-- Detalle de factura.
-- Producto.
+Se utilizaron claves foráneas para establecer relaciones entre las entidades.
 
-También se utilizan operaciones para obtener los importes correspondientes a la venta.
+Estas restricciones permiten impedir determinadas operaciones que generarían referencias a registros inexistentes.
 
-📄 [Ver documentación](docs/etapa-04/comprobante-venta.md)
+## Integridad de dominio
 
-💻 [Ver script SQL](sql/consultas/comprobante_venta.sql)
+Se utilizaron tipos de datos y restricciones para controlar los valores almacenados.
 
-## 10.2. Consulta avanzada
+Entre los mecanismos implementados se encuentran:
 
-Esta consulta permite identificar clientes cuyo importe acumulado de compras supera un valor determinado.
+- `PRIMARY KEY`
+- `FOREIGN KEY`
+- `UNIQUE`
+- `NOT NULL`
+- `CHECK`
 
-Se utilizan operaciones como:
+## Verificación mediante pruebas
 
-- `INNER JOIN`
-- `GROUP BY`
-- `SUM`
-- `HAVING`
-- `ORDER BY`
+Las pruebas permiten comprobar el comportamiento de las restricciones y las operaciones SQL.
 
-📄 [Ver documentación](docs/etapa-04/consulta-avanzada.md)
+En la Etapa V, por ejemplo, se documentó una transacción que intentaba registrar un detalle de venta con un producto inexistente.
 
-💻 [Ver script SQL](sql/consultas/consulta_avanzada.sql)
+SQL Server detectó una infracción de clave foránea y la operación fue cancelada mediante `ROLLBACK`.
 
-## 10.3. Informe de ventas
+Este ejemplo permite relacionar el manejo de transacciones con la integridad referencial.
 
-Permite obtener información agrupada sobre los productos vendidos.
+**Documentación complementaria:**
 
-Entre los resultados que pueden analizarse se encuentran:
-
-- Productos comercializados.
-- Cantidad de operaciones.
-- Unidades vendidas.
-- Ingresos obtenidos.
-
-📄 [Ver documentación](docs/etapa-04/informe-ventas.md)
-
-💻 [Ver script SQL](sql/consultas/informe_ventas.sql)
+- [Restricciones de integridad](docs/etapa-03/restricciones-integridad.md)
+- [Pruebas y validación](docs/etapa-03/pruebas-validacion.md)
 
 ---
 
-# 11. Seguridad y optimización
+# Tecnologías utilizadas
 
-Durante la etapa 5 se incorporaron actividades relacionadas con la administración de accesos y la evaluación del rendimiento.
-
-## 11.1. Seguridad
-
-La administración de seguridad permite establecer qué operaciones puede realizar cada usuario.
-
-Para ello se utilizan:
-
-- Usuarios de base de datos.
-- Inicios de sesión.
-- Roles.
-- Permisos.
-- Instrucciones de autorización.
-
-La asignación de permisos permite organizar el acceso según las responsabilidades de cada usuario.
-
-### Archivos
-
-📄 [Documentación de seguridad](docs/etapa-05/seguridad.md)
-
-💻 [Script de seguridad](sql/tecnico/seguridad.sql)
-
-## 11.2. Índices y optimización
-
-La optimización busca mejorar el rendimiento de las consultas.
-
-Los índices pueden facilitar la localización de registros y reducir la cantidad de operaciones necesarias para obtener determinados resultados.
-
-Para evaluar su comportamiento se pueden utilizar:
-
-- Planes de ejecución.
-- Estadísticas de tiempo.
-- Estadísticas de entrada y salida.
-- Comparaciones entre consultas con y sin índices.
-
-### Archivos
-
-📄 [Documentación de índices](docs/etapa-05/indices-optimizacion.md)
-
-💻 [Script de índices](sql/tecnico/indices.sql)
-
----
-
-# 12. Tecnologías utilizadas
-
-| Tecnología | Utilización |
+| Tecnología | Aplicación |
 |---|---|
-| Microsoft SQL Server | Gestión de la base de datos relacional. |
-| SQL Server Management Studio | Creación, administración y ejecución de consultas. |
-| T-SQL | Definición, manipulación y consulta de datos. |
-| Git | Control de versiones del proyecto. |
-| GitHub | Almacenamiento y organización del repositorio. |
-| Markdown | Elaboración de la documentación técnica. |
-| ERDPlus | Desarrollo del modelo conceptual y relacional. |
+| **Microsoft SQL Server** | Sistema gestor de bases de datos relacional. |
+| **SQL Server Express** | Entorno utilizado para implementar y probar funcionalidades. |
+| **SQL Server Management Studio** | Administración y ejecución de scripts SQL. |
+| **T-SQL** | Definición, manipulación y consulta de datos. |
+| **ERDPlus** | Elaboración del modelo conceptual y relacional. |
+| **Git** | Control de versiones. |
+| **GitHub** | Organización del repositorio y trabajo colaborativo. |
+| **Markdown** | Documentación técnica y académica. |
 
 ---
 
-# 13. Integrantes del equipo
+# Organización del equipo
 
-## Grupo 10 — CasiFunciona
+## Equipo 10 — CasiFunciona
 
-**Universidad:** Universidad Nacional del Nordeste (UNNE)
-
-**Facultad:** Facultad de Ciencias Exactas y Naturales y Agrimensura (FaCENA)
-
-**Asignatura:** Base de Datos I
-
+**Universidad:** Universidad Nacional del Nordeste  
+**Facultad:** Facultad de Ciencias Exactas y Naturales y Agrimensura  
+**Asignatura:** Base de Datos I  
 **Ciclo lectivo:** 2026
 
 ### Integrantes
 
-| N.º | Apellido y nombre |
-|:---:|---|
-| 1 | Niveyro, Lucía |
-| 2 | Pared Ifran, Maitena |
-| 3 | Fernández, Lucía Belén |
-| 4 | Fabregat, Malena Ayelén |
+| Integrante |
+|---|
+| Niveyro, Lucía |
+| Pared Ifran, Maitena |
+| Fernández, Lucía Belén |
+| Fabregat, Malena Ayelén |
 
 ---
 
-# 14. Conclusión
+# Conclusión
 
-El desarrollo de **NegocioIndumentariaDtf** permitió aplicar de manera práctica los conocimientos adquiridos durante la asignatura Base de Datos I.
+El desarrollo de **NegocioIndumentariaDtf** permitió aplicar de manera progresiva los conocimientos adquiridos durante la asignatura.
 
-A lo largo del proyecto se trabajó en el análisis de requerimientos, la definición de reglas de negocio, el diseño conceptual y lógico, la normalización y la implementación física de una base de datos relacional.
+A lo largo de las cinco etapas trabajamos en el análisis de requerimientos, la definición de reglas de negocio, el modelado conceptual y lógico, la normalización y la implementación física de una base de datos relacional.
 
-Posteriormente, se desarrollaron consultas SQL para obtener información comercial y se incorporaron actividades relacionadas con la seguridad y la optimización del sistema.
+Posteriormente, desarrollamos consultas SQL para obtener información comercial y trabajamos con funcionalidades avanzadas de SQL Server, como procedimientos almacenados, funciones, transacciones, triggers de auditoría, seguridad y optimización mediante índices.
 
-El trabajo también permitió comprender la importancia de las restricciones de integridad, las relaciones entre entidades y la correcta organización de la información.
+Estas actividades nos permitieron comprender que el desarrollo de una base de datos no consiste solamente en almacenar información, sino también en organizarla correctamente, establecer relaciones, mantener su integridad y controlar las operaciones realizadas.
 
-Finalmente, la utilización de GitHub facilitó la organización de los archivos, la documentación de las etapas y el trabajo colaborativo entre los integrantes del equipo.
+Además, el uso de GitHub facilitó la documentación y el trabajo colaborativo, permitiendo reunir los aportes individuales en un mismo proyecto.
 
-El proyecto constituye una aplicación de los conceptos fundamentales de bases de datos a un caso de negocio relacionado con la producción y comercialización de indumentaria personalizada.
+Como resultado, el repositorio integra los documentos y scripts correspondientes a las cinco etapas, representando una aplicación práctica de los contenidos de la asignatura a un negocio de indumentaria personalizada.
 
 ---
 
 <div align="center">
 
-###  NegocioIndumentariaDtf
+### NegocioIndumentariaDtf
 
 **Proyecto Integrador — Base de Datos I**
 
 **Equipo 10 — CasiFunciona**
 
-**FaCENA — Universidad Nacional del Nordeste**
+Facultad de Ciencias Exactas y Naturales y Agrimensura  
+Universidad Nacional del Nordeste
 
 **2026**
+
+---
+
+*Análisis · Modelado · Implementación · Consultas · Administración*
 
 </div>
